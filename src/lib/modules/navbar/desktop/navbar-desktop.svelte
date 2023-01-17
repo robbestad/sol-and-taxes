@@ -12,7 +12,7 @@
     <NavbarDesktopLinks />
 
     <div class="hidden md:block">
-      <div class="ml-4 flex items-center md:ml-6">
+      <div class="ml-4 flex gap-4 items-center md:ml-6">
         <NavbarDesktopUser {user} />
 
         <!-- Only way to update styles is through :global() https://github.com/svelte-on-solana/wallet-adapter/issues/19 -->
