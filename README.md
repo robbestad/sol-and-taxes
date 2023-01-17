@@ -1,6 +1,6 @@
 # Sol and Taxes
 
-Helping you calculate crypto gains and losses for taxes.
+Crypto gains and losses tax calculator for Solana wallets.
 
 ## Terminals
 
