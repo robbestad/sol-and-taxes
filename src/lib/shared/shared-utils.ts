@@ -1,5 +1,13 @@
 import { isEmpty, isNil } from 'ramda';
 
+export const createSigningMessage = () => `Sign in with Sol and Taxes 
+
+        No password needed.
+        
+        Clicking "Sign" or "Approve only means you have proved this wallet is owned by you.
+        
+        This request will not trigger any blockchain transaction or cost any gas fee.`;
+
 export const throwIfHttpError = (response: any) => {
   if (!response.ok) {
     const formattedErrorString = `${response.status} - ${

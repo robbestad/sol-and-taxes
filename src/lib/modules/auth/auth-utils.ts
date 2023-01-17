@@ -1,25 +1,77 @@
-import jwt from 'jsonwebtoken';
 import { HASURA_ROLE } from '$lib/shared/shared.type';
 
-export const createJwt = (body: Record<string, any>, secret: string): string => {
-  const token = jwt.sign(body, secret, {
-    expiresIn: '1d'
-  });
-  return token;
-};
+import { get } from 'svelte/store';
 
-/**
- * https://hasura.io/docs/latest/graphql/core/auth/authentication/jwt.html
- */
-export const createJwtClaims = (userId: string, role = HASURA_ROLE.USER) => {
-  const claims = {
-    ['https://hasura.io/jwt/claims']: {
-      'x-hasura-default-role': role,
-      'x-hasura-allowed-roles': ['user', 'hasura'],
-      'x-hasura-user-is-anonymous': 'false',
-      'x-hasura-user-id': userId
+import bs58 from 'bs58';
+import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
+
+import { nhost } from '$lib/core/nhost/nhost';
+import {
+  createSigningMessage,
+  hasuraGraphqlRequest,
+  readResponseStreamAsJson,
+  throwIfHttpError
+} from '$lib/shared/shared-utils';
+import {
+  user$,
+  userJwt$,
+  walletPublicKey$,
+  walletPublicKeyAddress$
+} from '$lib/shared/shared.store';
+
+export async function authenticate(publicKeyAddress: string, encodedSignature: string) {
+  const authResponse = await fetch(`/api/auth/authenticate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      publicKeyAddress,
+      encodedSignature
+    })
+  })
+    .then(throwIfHttpError)
+    .then(readResponseStreamAsJson);
+
+  return authResponse;
+}
+
+export async function signIn() {
+  const message = new TextEncoder().encode(createSigningMessage());
+
+  const publicKey = get(walletPublicKey$);
+  const signature = await get(walletStore$)?.signMessage?.(message);
+  const graphqlUrl = nhost.graphql.getUrl();
+  const walletAddress = get(walletPublicKeyAddress$);
+
+  if (signature && publicKey) {
+    // Encoded for easy http transport
+    const encodedSignature = bs58.encode(signature);
+
+    const userJwt = await authenticate(publicKey.toString(), encodedSignature)
+      .then((response) => response?.userJwt)
+      .catch(throwIfHttpError);
+
+    if (!userJwt) {
+      return;
     }
-  };
 
-  return claims;
-};
+    // const response = (await hasuraGraphqlRequest(
+    //   userDataQuery,
+    //   {
+    //     walletAddress
+    //   },
+    //   graphqlUrl,
+    //   userJwt
+    // )) as any;
+
+    const user = {
+      yes: 'ser'
+    };
+
+    userJwt$.set(userJwt);
+    user$.set(user);
+
+    return userJwt;
+  }
+}
