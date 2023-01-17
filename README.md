@@ -1,38 +1,70 @@
-# create-svelte
+# Sol and Taxes
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Helping you calculate crypto gains and losses for taxes.
 
-## Creating a project
+## Terminals
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. Sveltekit - `npm run dev`
+2. nhost - `nhost dev`
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Development notes
 
-# create a new project in my-app
-npm create svelte@latest my-app
+- `npm run dev` runs sveltekit server
+- `nhost dev` runs nhost
+- `npm run check` syncs `.env` variables
+
+## Production branches
+
+- `nhost-production` - to deploy nhost/hasura
+
+## Deployment checklist
+
+- Update & switch `.env` (dev to prod)
+- Build & push Docker images (dependencies & server)
+- Update K8s files
+- Deploy `nhost` branch (if needed)
+- Deploy K8s updates
+
+## Deployment commands
+
+Make sure to switch to the appropriate `Dockerfile` code, using `dependencies.Dockerfile` and `production.Dockerfile`, when running the build commands.
+
+`docker build -t {prefix}/{project}-dependencies:2.0.0 .`
+`docker build -t {prefix}/{project}:2.0.0 .`
+`docker push {prefix}/{project}-dependencies:2.0.0`
+
+See `{infrastructure-repo}` `README` for `k8s` deployment instructions
+
+## nhost quirks/undocumented
+
+- nhost client seems to keep track of authenticated state of users in some session
+- nhost client automatically does stuff with auth/refresh tokens using the admin role
+- nhost client automatically attaches `user_vars` to client graphql requests:
+- `http://localhost:1337/v1/functions/time` (example for accessing nhost functions)
+- use `isAuthenticatedAsync` over `isAuthenticated` and call `getSession` AFTER the authentication check or else the session sometimes won't be available
+
+```
+// For authenticated user
+user_vars: {
+  "x-hasura-role":"user",
+  "x-hasura-user-isanonymous":"false",
+  "x-hasura-user-id":"cef5e0e7-c7eb-4099-b891-1ff5055e1c55"
+}
+
+// For public user
+user_vars: {"x-hasura-role":"public"}
 ```
 
-## Developing
+- nhost client automatically sends access token as request header in client graphql requests
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```
+// If the user is signed in, the user's access token is attached in the Authorization header.
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+- "If the function does not export a default request/response handler it should not be served as a http endpoint." – Johan Eliasson
 
-To create a production version of your app:
+## Felte quirks
 
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- InitialValues do not get re-initialized.
+- If the html disappears so does the field data
