@@ -22,7 +22,7 @@ Helping you calculate crypto gains and losses for taxes.
 - Update & switch `.env` (dev to prod)
 - Build & push Docker images (dependencies & server)
 - Update K8s files
-- Deploy `nhost` branch (if needed)
+- Deploy `nhost` branch (if required)
 - Deploy K8s updates
 
 ## Deployment commands
