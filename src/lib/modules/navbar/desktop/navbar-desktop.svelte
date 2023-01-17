@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { WalletMultiButton } from '@svelte-on-solana/wallet-adapter-ui';
+
   import NavbarDesktopLinks from './navbar-desktop-links.svelte';
   import NavbarDesktopUser from './navbar-desktop-user.svelte';
 
@@ -12,6 +14,9 @@
     <div class="hidden md:block">
       <div class="ml-4 flex items-center md:ml-6">
         <NavbarDesktopUser {user} />
+
+        <!-- Only way to update styles is through :global() https://github.com/svelte-on-solana/wallet-adapter/issues/19 -->
+        <WalletMultiButton />
       </div>
     </div>
   </div>

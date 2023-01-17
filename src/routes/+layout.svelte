@@ -12,7 +12,7 @@
   let _Toast = Toast;
   let wallets;
 
-  const localStorageKey = 'walletAdapter';
+  const localStorageKey = 'solWalletAdapter';
 
   onMount(async () => {
     const { PhantomWalletAdapter } = await import('@solana/wallet-adapter-wallets');
