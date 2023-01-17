@@ -16,7 +16,7 @@
         src={logoCdnLnk}
         alt="Your Company"
       />
-      <span class="text-xl font-medium text-white"> beepbooply </span>
+      <span class="text-xl font-medium text-white"> Sol and Taxes </span>
     </div>
   </button>
   <div class="hidden md:block">
