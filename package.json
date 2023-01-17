@@ -45,6 +45,7 @@
   "type": "module",
   "dependencies": {
     "@nhost/nhost-js": "^1.13.1",
+    "@solana/web3.js": "^1.73.0",
     "felte": "^1.2.7",
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.2.1",
