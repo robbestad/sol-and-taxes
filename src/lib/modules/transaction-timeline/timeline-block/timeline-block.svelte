@@ -47,7 +47,7 @@
       <div class="flex flex-col w-full">
         <div class="min-w-0 flex-1 mb-1.5">
           <div class="text-sm text-gray-500">
-            Transactions on {formattedDate}
+            Transactions on {formattedDate}{#if isBlockHidden}...{/if}
           </div>
         </div>
         {#if !isBlockHidden}
