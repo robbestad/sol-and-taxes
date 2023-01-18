@@ -1,8 +1,12 @@
 import { derived, writable } from 'svelte/store';
 import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
 
+export const transactionHistory$ = writable([]);
+
 /**
  * Auth (wallet)
+ *
+ * @TODO Possibly deprecated
  */
 export const isWalletSelectedButNotConnected$ = derived(walletStore$, (walletStore) => {
   const { adapter, connected, connecting, name, publicKey } = walletStore;
@@ -32,6 +36,8 @@ export const walletPublicKeyAddress$ = derived(walletStore$, (walletStore) => {
 
 /**
  * Auth (user)
+ *
+ * @TODO Possibly deprecated
  */
 export const userJwt$ = writable(null);
 
@@ -56,6 +62,8 @@ export const clearStores = () => {
 
 /**
  * User
+ *
+ * @TODO Possibly deprecated
  */
 // Includes userProfile
 export const user$ = writable(null as any);

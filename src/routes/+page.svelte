@@ -1,16 +1,22 @@
 <script>
+  import { getNotificationsContext } from 'svelte-notifications';
+
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
   import TransactionTimeline from '$lib/modules/transaction-timeline/transaction-timeline.svelte';
   import MiniPlusIcon from '$lib/shared/icons/mini-plus-icon.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
+  import { transactionHistory$ } from '$lib/shared/shared.store';
+  import { notifcationSettings } from '$lib/shared/shared.constant';
+
+  const { addNotification } = getNotificationsContext();
 
   export let data;
 
   let isLoading;
 
   const fetchTransactionHistory = async () => {
-    const res = await fetch(`/api/transaction-history`, {
+    const response = await fetch(`/api/transaction-history`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -22,7 +28,12 @@
       .then(throwIfHttpError)
       .then(readResponseStreamAsJson);
 
-    console.log('res: ', res);
+    transactionHistory$.set(response);
+
+    addNotification({
+      ...notifcationSettings,
+      text: `${response?.length || 0} Transactions retrieved`
+    });
   };
 </script>
 
@@ -51,7 +62,7 @@
     <button
       on:click={fetchTransactionHistory}
       type="button"
-      class="inline-flex items-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      class="inline-flex items-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 mb-10 text-sm font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >Button text</button
     >
 
