@@ -96,3 +96,14 @@ export const unixTimestampToDate = (timestamp: number) => {
 
   return date;
 };
+
+// Intended for wallet addresses
+export const shortenLongWordsWithin = (str: string) => {
+  const words = str.split(' ');
+  const shortWords = words.map((word) =>
+    word.length > 15
+      ? word.substring(0, 4) + '...' + word.substring(word.length - 3)
+      : word
+  );
+  return shortWords.join(' ');
+};

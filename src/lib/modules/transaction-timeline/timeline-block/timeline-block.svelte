@@ -52,7 +52,7 @@
         </div>
         {#if !isBlockHidden}
           <div transition:slide>
-            <TransactionsBlock />
+            <TransactionsBlock {transactions} />
           </div>
         {/if}
       </div>
