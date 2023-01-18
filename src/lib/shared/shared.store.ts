@@ -1,7 +1,42 @@
 import { derived, writable } from 'svelte/store';
 import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
+import { DateTime } from 'luxon';
 
-export const transactionHistory$ = writable([]);
+import { unixTimestampToDate } from './shared-utils';
+
+// https://docs.helius.xyz/api-reference/enhanced-transactions-api/parsed-transaction-history
+export const transactionHistory$ = writable([] as any);
+
+/**
+ * Split transactions into daily blocks based on timestamp
+ */
+export const transactionHistoryByDay$ = derived(
+  transactionHistory$,
+  (transactionHistory) => {
+    const transactionHistoryByDay = transactionHistory.reduce((acc, transaction) => {
+      const date = unixTimestampToDate(transaction.timestamp);
+      const luxonDateTime = DateTime.fromISO(date.toISOString());
+      const isoDate = luxonDateTime.toISODate();
+
+      const dayBlock = acc.find((block) => {
+        return block.isoDate === isoDate;
+      });
+
+      if (dayBlock) {
+        dayBlock.transactions.push(transaction);
+      } else {
+        acc.push({
+          isoDate,
+          transactions: [transaction]
+        });
+      }
+
+      return acc;
+    }, []);
+
+    return transactionHistoryByDay;
+  }
+);
 
 /**
  * Auth (wallet)
