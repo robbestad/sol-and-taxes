@@ -1,7 +1,7 @@
 <script>
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
-  import Timeline from '$lib/modules/transaction-timeline/timeline.svelte';
+  import TransactionTimeline from '$lib/modules/transaction-timeline/transaction-timeline.svelte';
   import MiniPlusIcon from '$lib/shared/icons/mini-plus-icon.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
 
@@ -55,6 +55,6 @@
       >Button text</button
     >
 
-    <Timeline />
+    <TransactionTimeline />
   </svelte:fragment>
 </PageContainer>

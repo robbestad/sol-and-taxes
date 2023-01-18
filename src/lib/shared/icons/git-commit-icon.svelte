@@ -3,7 +3,7 @@
 </script>
 
 <svg
-  class={`octicon octicon-git-commit ${extraClasses}`}
+  class={`${extraClasses}`}
   fill="currentColor"
   aria-hidden="true"
   height="16"
