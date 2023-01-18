@@ -1,6 +1,6 @@
+import { DateTime } from 'luxon';
 import { derived, writable } from 'svelte/store';
 import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
-import { DateTime } from 'luxon';
 
 import { unixTimestampToDate } from './shared-utils';
 
@@ -15,8 +15,7 @@ export const transactionHistoryByDay$ = derived(
   (transactionHistory) => {
     const transactionHistoryByDay = transactionHistory.reduce((acc, transaction) => {
       const date = unixTimestampToDate(transaction.timestamp);
-      const luxonDateTime = DateTime.fromISO(date.toISOString());
-      const isoDate = luxonDateTime.toISODate();
+      const isoDate = DateTime.fromISO(date.toISOString()).toISODate();
 
       const dayBlock = acc.find((block) => {
         return block.isoDate === isoDate;

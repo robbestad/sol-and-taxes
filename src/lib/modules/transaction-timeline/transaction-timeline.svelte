@@ -2,13 +2,10 @@
   import { transactionHistoryByDay$ } from '$lib/shared/shared.store';
 
   import TimelineBlock from './timeline-block/timeline-block.svelte';
-
-  $: {
-    console.log('dailyBlocks: ', $transactionHistoryByDay$);
-  }
 </script>
 
 <ul>
-  <TimelineBlock />
-  <TimelineBlock />
+  {#each $transactionHistoryByDay$ as dailyBlock}
+    <TimelineBlock {dailyBlock} />
+  {/each}
 </ul>
