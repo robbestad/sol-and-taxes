@@ -1,8 +1,8 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { json, error } from '@sveltejs/kit';
-import { HELIUS_API_KEY } from '$env/static/private';
+import { json } from '@sveltejs/kit';
+// import { HELIUS_API_KEY } from '$env/static/private';
 
-import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
+// import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
 import { MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE } from './transaction-history.constant';
 
 export const POST = async (event: RequestEvent) => {
@@ -20,15 +20,12 @@ export const POST = async (event: RequestEvent) => {
   // })
   //   .then(throwIfHttpError)
   //   .then(readResponseStreamAsJson);
-  // const res = MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE
 
   const res = await new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE);
     }, 1000);
   });
-
-  console.log('server-res: ', res);
 
   return json(res);
 };

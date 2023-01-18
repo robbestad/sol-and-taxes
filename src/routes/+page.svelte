@@ -9,8 +9,6 @@
   let isLoading;
 
   const handleHeliusClick = async () => {
-    console.log('clicky');
-
     const res = await fetch(`/api/transaction-history`, {
       method: 'POST',
       headers: {
@@ -23,7 +21,7 @@
       .then(throwIfHttpError)
       .then(readResponseStreamAsJson);
 
-    console.log('res: ', JSON.stringify(res, null, 2));
+    console.log('res: ', res);
   };
 </script>
 
