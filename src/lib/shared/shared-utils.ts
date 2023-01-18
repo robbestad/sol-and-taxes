@@ -90,3 +90,9 @@ export function onClickOutside(node: any) {
 export function autofocus(el: any) {
   el.focus();
 }
+
+export const unixTimestampToDate = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
+
+  return date;
+};

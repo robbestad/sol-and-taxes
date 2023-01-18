@@ -1,6 +1,7 @@
 <script>
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
+  import Timeline from '$lib/modules/transaction-timeline/timeline.svelte';
   import MiniPlusIcon from '$lib/shared/icons/mini-plus-icon.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
 
@@ -8,7 +9,7 @@
 
   let isLoading;
 
-  const handleHeliusClick = async () => {
+  const fetchTransactionHistory = async () => {
     const res = await fetch(`/api/transaction-history`, {
       method: 'POST',
       headers: {
@@ -48,10 +49,12 @@
 
   <svelte:fragment slot="page-content">
     <button
-      on:click={handleHeliusClick}
+      on:click={fetchTransactionHistory}
       type="button"
       class="inline-flex items-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >Button text</button
     >
+
+    <Timeline />
   </svelte:fragment>
 </PageContainer>

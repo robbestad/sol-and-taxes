@@ -1,5 +1,3 @@
-import { TRANSACTION_SOURCE } from './shared.type';
-
 export const logoCdnLnk = `https://keylayapps.nyc3.cdn.digitaloceanspaces.com/beepbooply/beepbooply%20-%20512px.png`;
 
 export const discordLink = `https://discord.gg/sw8qnwKwhX`;
@@ -10,7 +8,7 @@ export const notifcationSettings = {
 };
 
 // https://docs.helius.xyz/api-reference/transaction-types
-export const TYPE_TO_SOURCE = {
+export const TRANSACTION_TYPE_TO_SOURCE = {
   NFT_MINT: [
     'CANDY_MACHINE_V2',
     'CANDY_MACHINE_V1',
