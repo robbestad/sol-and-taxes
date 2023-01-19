@@ -2,6 +2,8 @@
   import { getNotificationsContext } from 'svelte-notifications';
   import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
   import { slide } from 'svelte/transition';
+  import Fuse from 'fuse.js';
+  import { DateTime } from 'luxon';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
@@ -10,16 +12,41 @@
   import { transactionHistory$ } from '$lib/shared/shared.store';
   import { notifcationSettings } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
+  import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
+  import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
 
   import EmptyState from './empty-state.svelte';
-  import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
-    import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
 
   const { addNotification } = getNotificationsContext();
+  const fuseOptions = {
+    threshold: 0.1,
+    keys: [
+      'description',
+      'feePayer',
+      'signature',
+      'source',
+      'type',
+      'events.nft.buyer',
+      'events.nft.seller',
+      'events.nft.saleType',
+      'events.nft.amount'
+    ]
+  };
 
   export let data;
 
+  let searchQuery = '';
   let isLoading;
+
+  $: fuse = new Fuse($transactionHistory$, fuseOptions);
+  $: transactionHistory = searchQuery
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : $transactionHistory$;
+
+  $: {
+    console.log('searchQuery: ', searchQuery);
+    console.log('filteredTransactionHistory: ', transactionHistory);
+  }
 
   const fetchTransactionHistory = async () => {
     isLoading = true;
@@ -69,6 +96,7 @@
                   <MagnifyingGlassIcon />
                 </div>
                 <input
+                  bind:value={searchQuery}
                   id="search"
                   name="search"
                   class="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
@@ -156,9 +184,12 @@
   <!-- Page content -->
   <svelte:fragment slot="page-content">
     {#if $transactionHistory$.length > 0}
-      <TransactionTimeline />
+      <TransactionTimeline {transactionHistory} />
     {:else}
-      <EmptyState {fetchTransactionHistory} />
+      <EmptyState
+        {fetchTransactionHistory}
+        {isLoading}
+      />
     {/if}
   </svelte:fragment>
 </PageContainer>

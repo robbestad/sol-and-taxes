@@ -1,5 +1,8 @@
 <script lang="ts">
+  import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
+
   export let fetchTransactionHistory;
+  export let isLoading = false;
 </script>
 
 <div class="text-center mt-12">
@@ -21,12 +24,23 @@
   <h3 class="mt-2 text-sm font-medium text-gray-900">No transactions</h3>
   <p class="mt-1 text-sm text-gray-500">Get started by fetching transactions.</p>
   <div class="mt-6">
-    <button
-      on:click={fetchTransactionHistory}
-      type="button"
-      class="inline-flex items-center gap-1 rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-    >
-      Fetch transactions
-    </button>
+    {#if isLoading}
+      <button
+        disabled
+        type="button"
+        class="inline-flex gap-1 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        <LoadingButtonSpinnerIcon />
+        Fetch transactions
+      </button>
+    {:else}
+      <button
+        on:click={fetchTransactionHistory}
+        type="button"
+        class="inline-flex items-center gap-1 rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        Fetch transactions
+      </button>
+    {/if}
   </div>
 </div>
