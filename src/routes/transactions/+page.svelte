@@ -18,6 +18,7 @@
 
   import TransactionTimeline from './transaction-timeline/transaction-timeline.svelte';
   import EmptyState from './empty-state.svelte';
+  import Settings from './settings/settings.svelte';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -38,7 +39,9 @@
   export let data;
 
   let searchQuery = '';
-  let isLoading;
+  let isFetchingTransactions;
+  let showSettings = true;
+  let showTransactions = true;
 
   $: fuse = new Fuse($transactionHistory$, fuseOptions);
   $: transactionHistory = searchQuery
@@ -50,8 +53,16 @@
     console.log('filteredTransactionHistory: ', transactionHistory);
   }
 
+  const toggleSettings = () => {
+    showSettings = !showSettings;
+  };
+
+  const toggleTransactions = () => {
+    showTransactions = !showTransactions;
+  };
+
   const fetchTransactionHistory = async () => {
-    isLoading = true;
+    isFetchingTransactions = true;
 
     const response = await fetch(`/api/transaction-history`, {
       method: 'POST',
@@ -72,7 +83,7 @@
       text: `${response?.length || 0} Transactions fetched`
     });
 
-    isLoading = false;
+    isFetchingTransactions = false;
   };
 </script>
 
@@ -137,32 +148,30 @@
                   tabindex="-1"
                 >
                   <button
-                    on:click={() => {
-                      console.log('clicky');
-                    }}
+                    on:click={toggleSettings}
                     on:click={() => close(null)}
                     class="w-full flex items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                   >
-                    Hide settings
+                    {showSettings ? `Hide settings` : `Show settings`}
                   </button>
-                  <button
-                    on:click={() => {
-                      console.log('clicky');
-                    }}
-                    on:click={() => close(null)}
-                    class="w-full flex items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
-                  >
-                    Hide transactions
-                  </button>
+                  {#if $hasTransactionHistory$}
+                    <button
+                      on:click={toggleTransactions}
+                      on:click={() => close(null)}
+                      class="w-full flex items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      {showTransactions ? `Hide transactions` : `Show transactions`}
+                    </button>
+                  {/if}
                 </div>
               </PopoverPanel>
             {/if}
           </Popover>
 
           <!-- Primary CTA -->
-          {#if isLoading}
+          {#if isFetchingTransactions}
             <button
               disabled
               type="button"
@@ -187,12 +196,18 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    {#if $hasTransactionHistory$}
+    {#if showSettings}
+      <div transition:slide>
+        <Settings />
+      </div>
+    {/if}
+
+    {#if $hasTransactionHistory$ && showTransactions}
       <TransactionTimeline {transactionHistory} />
     {:else}
       <EmptyState
         {fetchTransactionHistory}
-        {isLoading}
+        {isFetchingTransactions}
       />
     {/if}
   </svelte:fragment>

@@ -2,7 +2,7 @@
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
 
   export let fetchTransactionHistory;
-  export let isLoading = false;
+  export let isFetchingTransactions = false;
 </script>
 
 <div class="text-center mt-12">
@@ -24,7 +24,7 @@
   <h3 class="mt-2 text-sm font-medium text-gray-900">No transactions</h3>
   <p class="mt-1 text-sm text-gray-500">Get started by fetching transactions.</p>
   <div class="mt-6">
-    {#if isLoading}
+    {#if isFetchingTransactions}
       <button
         disabled
         type="button"
