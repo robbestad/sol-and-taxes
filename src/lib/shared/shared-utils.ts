@@ -1,4 +1,5 @@
 import { isEmpty, isNil } from 'ramda';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 export const createSigningMessage = () => `Sign in with Sol and Taxes 
 
@@ -106,4 +107,8 @@ export const shortenLongWordsWithin = (str: string) => {
       : word
   );
   return shortWords.join(' ');
+};
+
+export const lamportsToSol = (lamports: number) => {
+  return lamports / LAMPORTS_PER_SOL;
 };
