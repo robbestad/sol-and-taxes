@@ -14,59 +14,26 @@
   export let data;
 
   let isLoading;
-
-  const fetchTransactionHistory = async () => {
-    const response = await fetch(`/api/transaction-history`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        something: 'good'
-      })
-    })
-      .then(throwIfHttpError)
-      .then(readResponseStreamAsJson);
-
-    transactionHistory$.set(response);
-
-    addNotification({
-      ...notifcationSettings,
-      text: `${response?.length || 0} Transactions fetched`
-    });
-  };
 </script>
 
 <PageContainer>
-  <svelte:fragment slot="page-header">
-    <PageHeader title={'Projects'}>
-      <svelte:fragment slot="primary-action">
-        {#if data.projects?.length > 0}
-          <button
-            on:click={() => {
-              console.log('hello');
-            }}
-            disabled={isLoading || (data.projects.length >= 5 && !data.isPaidUser)}
-            type="button"
-            class="inline-flex gap-1 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            <MiniPlusIcon />
-            New project
-          </button>
-        {/if}
-      </svelte:fragment>
-    </PageHeader>
-  </svelte:fragment>
+  
 
   <svelte:fragment slot="page-content">
-    <button
-      on:click={fetchTransactionHistory}
-      type="button"
-      class="inline-flex items-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 mb-10 text-sm font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-    >
-      Fetch transactions
-    </button>
-
-    <TransactionTimeline />
+    <div>
+            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Data to enrich your online business</h1>
+            <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p>
+            <div class="mt-8 flex gap-x-4 sm:justify-center">
+              <a href="#" class="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700">
+                Get started
+                <span class="text-indigo-200" aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="#" class="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                Live demo
+                <span class="text-gray-400" aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          </div>
+    
   </svelte:fragment>
 </PageContainer>

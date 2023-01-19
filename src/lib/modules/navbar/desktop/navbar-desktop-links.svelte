@@ -23,22 +23,10 @@
     <div class="ml-10 flex items-baseline space-x-4">
       <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
       <a
-        href="/projects"
+        href="/transactions"
         class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 active:bg-gray-900"
-        aria-current="page">Projects</a
+        aria-current="page">Transactions</a
       >
-      <a
-        href={'/usage'}
-        class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 active:bg-gray-900"
-      >
-        Usage
-      </a>
-      <a
-        href={'/plans'}
-        class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 active:bg-gray-900"
-      >
-        Plans
-      </a>
     </div>
   </div>
 </div>
