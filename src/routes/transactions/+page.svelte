@@ -3,13 +3,15 @@
   import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
   import { slide } from 'svelte/transition';
   import Fuse from 'fuse.js';
-  import { DateTime } from 'luxon';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
   import TransactionTimeline from '$lib/modules/transaction-timeline/transaction-timeline.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
-  import { transactionHistory$ } from '$lib/shared/shared.store';
+  import {
+    hasTransactionHistory$,
+    transactionHistory$
+  } from '$lib/shared/shared.store';
   import { notifcationSettings } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
@@ -81,31 +83,33 @@
       <svelte:fragment slot="primary-action">
         <div class="flex items-center gap-2">
           <!-- Search -->
-          <div
-            class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end"
-          >
-            <div class="w-full max-w-lg lg:max-w-xs">
-              <label
-                for="search"
-                class="sr-only">Search</label
-              >
-              <div class="relative">
-                <div
-                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          {#if $hasTransactionHistory$}
+            <div
+              class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end"
+            >
+              <div class="w-full max-w-lg lg:max-w-xs">
+                <label
+                  for="search"
+                  class="sr-only">Search</label
                 >
-                  <MagnifyingGlassIcon />
+                <div class="relative">
+                  <div
+                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                  >
+                    <MagnifyingGlassIcon />
+                  </div>
+                  <input
+                    bind:value={searchQuery}
+                    id="search"
+                    name="search"
+                    class="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="Search"
+                    type="search"
+                  />
                 </div>
-                <input
-                  bind:value={searchQuery}
-                  id="search"
-                  name="search"
-                  class="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                  placeholder="Search"
-                  type="search"
-                />
               </div>
             </div>
-          </div>
+          {/if}
 
           <!-- More actions -->
           <Popover let:open>
