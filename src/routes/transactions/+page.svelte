@@ -6,7 +6,6 @@
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
-  import TransactionTimeline from '$lib/modules/transaction-timeline/transaction-timeline.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
   import {
     hasTransactionHistory$,
@@ -17,6 +16,7 @@
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
   import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
 
+  import TransactionTimeline from './transaction-timeline/transaction-timeline.svelte';
   import EmptyState from './empty-state.svelte';
 
   const { addNotification } = getNotificationsContext();
@@ -187,7 +187,7 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    {#if $transactionHistory$.length > 0}
+    {#if $hasTransactionHistory$}
       <TransactionTimeline {transactionHistory} />
     {:else}
       <EmptyState

@@ -7,12 +7,10 @@
     lamportsToSol,
     shortenLongWord,
     shortenLongWordsWithin,
-    signatureToSolscanLink,
     tagTransaction,
     unixTimestampToDate
   } from '$lib/shared/shared-utils';
   import SolLogoIcon from '$lib/shared/icons/sol-logo-icon.svelte';
-  import ArrowTopRightOnSquareIcon from '$lib/shared/icons/arrow-top-right-on-square-icon.svelte';
   import DocumentDuplicateIcon from '$lib/shared/icons/document-duplicate-icon.svelte';
   import { notifcationSettings } from '$lib/shared/shared.constant';
   import { TRANSACTION_TAG } from '$lib/shared/shared.type';

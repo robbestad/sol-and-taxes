@@ -2,12 +2,6 @@
   import { getNotificationsContext } from 'svelte-notifications';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
-  import PageHeader from '$lib/modules/page-header/page-header.svelte';
-  import TransactionTimeline from '$lib/modules/transaction-timeline/transaction-timeline.svelte';
-  import MiniPlusIcon from '$lib/shared/icons/mini-plus-icon.svelte';
-  import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
-  import { transactionHistory$ } from '$lib/shared/shared.store';
-  import { notifcationSettings } from '$lib/shared/shared.constant';
 
   const { addNotification } = getNotificationsContext();
 
