@@ -1,6 +1,8 @@
 import { isEmpty, isNil } from 'ramda';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
+import { TRANSACTION_TAG } from './shared.type';
+
 export const createSigningMessage = () => `Sign in with Sol and Taxes 
 
         No password needed.
@@ -122,5 +124,44 @@ export const lamportsToSol = (lamports: number) => {
 };
 
 export const signatureToSolscanLink = (signature: string) => {
-  return `https://solscan.io/tx/${signature}`
-}
+  return `https://solscan.io/tx/${signature}`;
+};
+
+/**
+ * Currently accounting for NFT events only.
+ *
+ * @TODO swap events
+ */
+export const tagTransaction = (transaction: any): string[] => {
+  const solAmount = lamportsToSol(transaction?.events?.nft?.amount);
+
+  if (!solAmount) return [];
+
+  /**
+   * NFT events
+   */
+  const nftSaleType = transaction?.events?.nft?.saleType || '';
+  const nftBuyer = transaction?.events?.nft?.buyer;
+  const nftSeller = transaction?.events?.nft?.seller;
+  // Some NFT events look like duplicates but the crap copy is missing the buyer/seller
+  const hasNftBuyerAndSeller = nftBuyer && nftSeller;
+  const isNftPurchase =
+    hasNftBuyerAndSeller &&
+    transaction?.events?.nft?.buyer === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
+  const isNftSale =
+    hasNftBuyerAndSeller &&
+    transaction?.events?.nft?.seller === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
+
+  /**
+   * Tagging
+   */
+  const addNftPurchaseTag = isNftPurchase;
+  const addNftSaleTag = isNftSale;
+  const addUnknownTag = !isNftPurchase && !isNftSale;
+
+  return [
+    addNftPurchaseTag ? TRANSACTION_TAG.NFT_PURCHASE : '',
+    addNftSaleTag ? TRANSACTION_TAG.NFT_SALE : '',
+    addUnknownTag ? TRANSACTION_TAG.UNKNOWN : ''
+  ].filter(Boolean);
+};

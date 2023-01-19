@@ -7,6 +7,7 @@
     shortenLongWord,
     shortenLongWordsWithin,
     signatureToSolscanLink,
+    tagTransaction,
     unixTimestampToDate
   } from '$lib/shared/shared-utils';
   import SolLogoIcon from '$lib/shared/icons/sol-logo-icon.svelte';
@@ -36,22 +37,37 @@
   $: shortenedSignature = shortenLongWord(signature, 8, 5);
   $: solAmount = lamportsToSol(events?.nft?.amount);
 
+  /**
+   * NFT events
+   */
+  $: nftSaleType = transaction?.events?.nft?.saleType || '';
+  $: nftBuyer = transaction?.events?.nft?.buyer;
+  $: nftSeller = transaction?.events?.nft?.seller;
+  // Some NFT events look like duplicates but the crap copy is missing the buyer/seller
+  $: hasNftBuyerAndSeller = nftBuyer && nftSeller;
   $: isNftPurchase =
+    hasNftBuyerAndSeller &&
     transaction?.events?.nft?.buyer === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
   $: isNftSale =
+    hasNftBuyerAndSeller &&
     transaction?.events?.nft?.seller === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
+
+  /**
+   * Tags
+   */
+  $: tags = tagTransaction(transaction);
 
   $: {
     console.log('transaction: ', transaction?.description || 'empty', transaction);
   }
 
-  const toggleExpand = () => {
+  const toggleExpandDetails = () => {
     isExpanded = !isExpanded;
   };
 </script>
 
 <button
-  on:click={toggleExpand}
+  on:click={toggleExpandDetails}
   class="block w-full hover:bg-gray-50"
 >
   <div class="px-4 py-4 sm:px-6">
@@ -71,11 +87,13 @@
         <span class="text-xs text-gray-500"> {transactionTime}</span>
       </p>
       <div class="ml-2 flex flex-shrink-0">
-        <p
-          class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
-        >
-          Full-time
-        </p>
+        {#each tags as tag}
+          <p
+            class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
+          >
+            {tag}
+          </p>
+        {/each}
       </div>
     </div>
   </div>
@@ -98,15 +116,6 @@
             {shortenedSignature}
             <ArrowTopRightOnSquareIcon extraClasses="h-3 w-3" />
           </a>
-        </div>
-
-        <!-- Right side stuff -->
-        <div class="ml-2 flex flex-shrink-0">
-          <p
-            class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
-          >
-            Full-time
-          </p>
         </div>
       </div>
     </div>
