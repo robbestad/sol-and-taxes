@@ -98,18 +98,18 @@ export const unixTimestampToDate = (timestamp: number) => {
   return date;
 };
 
-export const shortenLongWord = (str: string) => {
+export const shortenLongWord = (str: string, startLength = 4, endLength = 3) => {
   return str.length > 15
-    ? str.substring(0, 4) + '...' + str.substring(str.length - 3)
+    ? str.substring(0, startLength) + '...' + str.substring(str.length - endLength)
     : str;
 };
 
 // Intended for wallet addresses
-export const shortenLongWordsWithin = (str: string) => {
+export const shortenLongWordsWithin = (str: string, startLength = 4, endLength = 3) => {
   const words = str.split(' ');
   const shortWords = words.map((word) =>
     word.length > 15
-      ? word.substring(0, 4) + '...' + word.substring(word.length - 3)
+      ? word.substring(0, startLength) + '...' + word.substring(word.length - endLength)
       : word
   );
   return shortWords.join(' ');
@@ -120,3 +120,7 @@ export const lamportsToSol = (lamports: number) => {
 
   return lamports / LAMPORTS_PER_SOL;
 };
+
+export const signatureToSolscanLink = (signature: string) => {
+  return `https://solscan.io/tx/${signature}`
+}

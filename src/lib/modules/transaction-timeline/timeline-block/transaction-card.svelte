@@ -9,6 +9,7 @@
     unixTimestampToDate
   } from '$lib/shared/shared-utils';
   import SolLogoIcon from '$lib/shared/icons/sol-logo-icon.svelte';
+  import ArrowTopRightOnSquareIcon from '$lib/shared/icons/arrow-top-right-on-square-icon.svelte';
 
   export let transaction;
 
@@ -31,7 +32,7 @@
     unixTimestampToDate(timestamp).toISOString()
   ).toLocaleString(DateTime.TIME_SIMPLE);
   $: formattedDescription = shortenLongWordsWithin(description);
-  $: shortenedSignature = shortenLongWord(signature);
+  $: shortenedSignature = shortenLongWord(signature, 8, 5);
   $: solAmount = lamportsToSol(events?.nft?.amount);
 
   $: {
@@ -79,9 +80,14 @@
       class="px-4 py-4 sm:px-6"
     >
       <div class="flex items-center justify-between">
-        <div class="flex flex-col items-start">
+        <div class="flex flex-col gap-2 items-start text-left">
           <span class="text-sm text-gray-500">{formattedDescription}</span>
-          <span class="text-sm text-gray-500">{shortenedSignature}</span>
+          <span
+            class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400 hover:underline"
+          >
+            {shortenedSignature}
+            <ArrowTopRightOnSquareIcon extraClasses="h-3 w-3" />
+          </span>
         </div>
 
         <!-- Right side stuff -->
