@@ -36,8 +36,10 @@
   $: shortenedSignature = shortenLongWord(signature, 8, 5);
   $: solAmount = lamportsToSol(events?.nft?.amount);
 
-  $: isNftPurchase = transaction?.events?.nft?.buyer === 'wallet';
-  $: isNftSale = transaction?.events?.nft?.seller === 'wallet';
+  $: isNftPurchase =
+    transaction?.events?.nft?.buyer === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
+  $: isNftSale =
+    transaction?.events?.nft?.seller === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
 
   $: {
     console.log('transaction: ', transaction?.description || 'empty', transaction);
@@ -87,6 +89,7 @@
         <div class="flex flex-col gap-2 items-start text-left">
           <span class="text-sm text-gray-500">{formattedDescription}</span>
           <a
+            on:click|stopPropagation
             href={signatureToSolscanLink(signature)}
             target="_blank"
             rel="noopener noreferrer"
