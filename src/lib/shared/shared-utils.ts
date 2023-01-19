@@ -98,6 +98,12 @@ export const unixTimestampToDate = (timestamp: number) => {
   return date;
 };
 
+export const shortenLongWord = (str: string) => {
+  return str.length > 15
+    ? str.substring(0, 4) + '...' + str.substring(str.length - 3)
+    : str;
+};
+
 // Intended for wallet addresses
 export const shortenLongWordsWithin = (str: string) => {
   const words = str.split(' ');
@@ -110,5 +116,7 @@ export const shortenLongWordsWithin = (str: string) => {
 };
 
 export const lamportsToSol = (lamports: number) => {
+  if (!lamports && typeof lamports !== 'number') return '';
+
   return lamports / LAMPORTS_PER_SOL;
 };
