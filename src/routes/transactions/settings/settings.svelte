@@ -1,11 +1,12 @@
 <script lang="ts">
   import MultiSelect from '$lib/shared/form/multi-select.svelte';
+  import {
+    TRANSACTION_SOURCE_OPTIONS,
+    TRANSACTION_TYPE_OPTIONS
+  } from '$lib/shared/shared.constant';
 
-  const ui_libs = ['AF', 'SQ', 'AR', 'HY', 'EU'];
-  const bu_libs = ['AF', 'SQ', 'AR', 'HY', 'EU'];
-
-  let selected;
-  let selected2;
+  let selectedTransactionTypes;
+  let selectedTransactionSources;
 </script>
 
 <div class="pb-5 mb-5 w-full">
@@ -32,12 +33,10 @@
         class="block text-sm font-medium text-gray-700">Transaction types</label
       >
 
-      <MultiSelect bind:value={selected}>
-        <option value="AF">Afrikanns</option>
-        <option value="SQ">Albanian</option>
-        <option value="AR">Arabic</option>
-        <option value="HY">Armenian</option>
-        <option value="EU">Basque</option>
+      <MultiSelect bind:value={selectedTransactionTypes}>
+        {#each TRANSACTION_TYPE_OPTIONS as option}
+          <option value={option.value}>{option.label}</option>
+        {/each}
       </MultiSelect>
     </div>
 
@@ -48,12 +47,10 @@
         class="block text-sm font-medium text-gray-700">Transaction sources</label
       >
 
-      <MultiSelect bind:value={selected2}>
-        <option value="AF">Afrikanns</option>
-        <option value="SQ">Albanian</option>
-        <option value="AR">Arabic</option>
-        <option value="HY">Armenian</option>
-        <option value="EU">Basque</option>
+      <MultiSelect bind:value={selectedTransactionSources}>
+        {#each TRANSACTION_SOURCE_OPTIONS as option}
+          <option value={option.value}>{option.label}</option>
+        {/each}
       </MultiSelect>
     </div>
   </div>
