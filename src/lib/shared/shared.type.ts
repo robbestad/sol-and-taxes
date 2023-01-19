@@ -16,6 +16,8 @@ export enum HASURA_ROLE {
 
 /**
  * https://docs.helius.xyz/api-reference/transaction-types
+ *
+ * Helius values
  */
 export enum TRANSACTION_TYPE {
   UNKNOWN = 'UNKNOWN',
@@ -142,6 +144,7 @@ export enum TRANSACTION_TYPE {
   ADD_INSTRUCTION = 'ADD_INSTRUCTION'
 }
 
+// Helius values
 export enum TRANSACTION_SOURCE {
   CANDY_MACHINE_V2 = 'CANDY_MACHINE_V2',
   CANDY_MACHINE_V1 = 'CANDY_MACHINE_V1',

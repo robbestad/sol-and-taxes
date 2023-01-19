@@ -15,6 +15,7 @@
   import ArrowTopRightOnSquareIcon from '$lib/shared/icons/arrow-top-right-on-square-icon.svelte';
   import DocumentDuplicateIcon from '$lib/shared/icons/document-duplicate-icon.svelte';
   import { notifcationSettings } from '$lib/shared/shared.constant';
+  import { TRANSACTION_TAG } from '$lib/shared/shared.type';
 
   const { addNotification } = getNotificationsContext();
 
@@ -102,8 +103,17 @@
       </p>
       <div class="ml-2 flex flex-shrink-0">
         {#each tags as tag}
+          {@const isNftPurchaseTag = tag === TRANSACTION_TAG.NFT_PURCHASE}
+          {@const isNftSaleTag = tag === TRANSACTION_TAG.NFT_SALE}
+          {@const isUnknownTag = tag === TRANSACTION_TAG.UNKNOWN}
           <p
-            class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
+            class="inline-flex rounded-full px-2 text-xs font-semibold leading-5"
+            class:bg-gray-100={isUnknownTag}
+            class:text-gray-800={isUnknownTag}
+            class:bg-green-100={isNftSaleTag}
+            class:text-green-800={isNftSaleTag}
+            class:bg-blue-100={isNftPurchaseTag}
+            class:text-blue-800={isNftPurchaseTag}
           >
             {tag}
           </p>
