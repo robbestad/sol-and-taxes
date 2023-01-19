@@ -6,6 +6,7 @@
     lamportsToSol,
     shortenLongWord,
     shortenLongWordsWithin,
+    signatureToSolscanLink,
     unixTimestampToDate
   } from '$lib/shared/shared-utils';
   import SolLogoIcon from '$lib/shared/icons/sol-logo-icon.svelte';
@@ -34,6 +35,9 @@
   $: formattedDescription = shortenLongWordsWithin(description);
   $: shortenedSignature = shortenLongWord(signature, 8, 5);
   $: solAmount = lamportsToSol(events?.nft?.amount);
+
+  $: isNftPurchase = transaction?.events?.nft?.buyer === 'wallet';
+  $: isNftSale = transaction?.events?.nft?.seller === 'wallet';
 
   $: {
     console.log('transaction: ', transaction?.description || 'empty', transaction);
@@ -82,12 +86,15 @@
       <div class="flex items-center justify-between">
         <div class="flex flex-col gap-2 items-start text-left">
           <span class="text-sm text-gray-500">{formattedDescription}</span>
-          <span
+          <a
+            href={signatureToSolscanLink(signature)}
+            target="_blank"
+            rel="noopener noreferrer"
             class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400 hover:underline"
           >
             {shortenedSignature}
             <ArrowTopRightOnSquareIcon extraClasses="h-3 w-3" />
-          </span>
+          </a>
         </div>
 
         <!-- Right side stuff -->
