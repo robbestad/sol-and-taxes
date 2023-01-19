@@ -7,6 +7,13 @@ import { unixTimestampToDate } from './shared-utils';
 // https://docs.helius.xyz/api-reference/enhanced-transactions-api/parsed-transaction-history
 export const transactionHistory$ = writable([] as any);
 
+export const hasTransactionHistory$ = derived(
+  transactionHistory$,
+  (transactionHistory) => {
+    return transactionHistory.length > 0;
+  }
+);
+
 /**
  * Split transactions into daily blocks based on timestamp
  */

@@ -1,5 +1,6 @@
 {
   "name": "sol-and-taxes",
+  "type": "module",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -12,6 +13,22 @@
     "test:unit": "vitest",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write ."
+  },
+  "dependencies": {
+    "@nhost/nhost-js": "^1.13.1",
+    "@solana/wallet-adapter-base": "^0.9.20",
+    "@solana/wallet-adapter-wallets": "^0.19.10",
+    "@solana/web3.js": "^1.73.0",
+    "@svelte-on-solana/wallet-adapter-core": "^1.0.11-alpha.0",
+    "@svelte-on-solana/wallet-adapter-ui": "^1.0.21-alpha.0",
+    "felte": "^1.2.7",
+    "fuse.js": "^6.6.2",
+    "jsonwebtoken": "^9.0.0",
+    "luxon": "^3.2.1",
+    "nanoid": "^4.0.0",
+    "svelte-notifications": "^0.9.98",
+    "svelte-simple-modal": "^1.4.6",
+    "tailwindcss": "^3.2.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
@@ -42,21 +59,5 @@
     "typescript": "^4.9.3",
     "vite": "^4.0.0",
     "vitest": "^0.25.3"
-  },
-  "type": "module",
-  "dependencies": {
-    "@nhost/nhost-js": "^1.13.1",
-    "@solana/wallet-adapter-base": "^0.9.20",
-    "@solana/wallet-adapter-wallets": "^0.19.10",
-    "@solana/web3.js": "^1.73.0",
-    "@svelte-on-solana/wallet-adapter-core": "^1.0.11-alpha.0",
-    "@svelte-on-solana/wallet-adapter-ui": "^1.0.21-alpha.0",
-    "felte": "^1.2.7",
-    "jsonwebtoken": "^9.0.0",
-    "luxon": "^3.2.1",
-    "nanoid": "^4.0.0",
-    "svelte-notifications": "^0.9.98",
-    "svelte-simple-modal": "^1.4.6",
-    "tailwindcss": "^3.2.4"
   }
 }

@@ -2,7 +2,7 @@
   export let fetchTransactionHistory;
 </script>
 
-<div class="text-center">
+<div class="text-center mt-12">
   <svg
     class="mx-auto h-12 w-12 text-gray-400"
     fill="none"
