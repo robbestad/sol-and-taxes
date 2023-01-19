@@ -104,18 +104,35 @@
       class="px-4 py-4 sm:px-6"
     >
       <div class="flex items-center justify-between">
-        <div class="flex flex-col gap-2 items-start text-left">
-          <span class="text-sm text-gray-500">{formattedDescription}</span>
-          <a
-            on:click|stopPropagation
-            href={signatureToSolscanLink(signature)}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400 hover:underline"
-          >
-            {shortenedSignature}
-            <ArrowTopRightOnSquareIcon extraClasses="h-3 w-3" />
-          </a>
+        <div class="flex flex-col gap-1 items-start text-left">
+          <span class="mb-3 text-sm text-gray-500">{formattedDescription}</span>
+          <span class="text-sm text-gray-500">
+            <span class="font-bold">Sale type:</span>
+            {nftSaleType || '–'}
+          </span>
+          <span class="text-sm text-gray-500">
+            <span class="font-bold"> Buyer: </span>
+            {nftBuyer || '–'}
+          </span>
+          <span class="text-sm text-gray-500">
+            <span class="font-bold">Seller:</span>
+            {nftSeller || '–'}
+          </span>
+
+          <span class="text-sm text-gray-500 flex gap-1">
+            <span class="font-bold"> Signature: </span>
+
+            <a
+              on:click|stopPropagation
+              href={signatureToSolscanLink(signature)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400 hover:underline"
+            >
+              {shortenedSignature}
+              <ArrowTopRightOnSquareIcon extraClasses="h-3 w-3" />
+            </a>
+          </span>
         </div>
       </div>
     </div>
