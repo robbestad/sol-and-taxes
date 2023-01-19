@@ -1,5 +1,6 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
+  import { getNotificationsContext } from 'svelte-notifications';
   import { DateTime } from 'luxon';
 
   import {
@@ -12,6 +13,10 @@
   } from '$lib/shared/shared-utils';
   import SolLogoIcon from '$lib/shared/icons/sol-logo-icon.svelte';
   import ArrowTopRightOnSquareIcon from '$lib/shared/icons/arrow-top-right-on-square-icon.svelte';
+  import DocumentDuplicateIcon from '$lib/shared/icons/document-duplicate-icon.svelte';
+  import { notifcationSettings } from '$lib/shared/shared.constant';
+
+  const { addNotification } = getNotificationsContext();
 
   export let transaction;
 
@@ -64,6 +69,15 @@
   const toggleExpandDetails = () => {
     isExpanded = !isExpanded;
   };
+
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+
+    addNotification({
+      ...notifcationSettings,
+      text: 'Copied'
+    });
+  };
 </script>
 
 <button
@@ -110,28 +124,45 @@
             <span class="font-bold">Sale type:</span>
             {nftSaleType || '–'}
           </span>
-          <span class="text-sm text-gray-500">
+          <span class="text-sm text-gray-500 flex gap-1">
             <span class="font-bold"> Buyer: </span>
-            {nftBuyer || '–'}
+            {#if nftBuyer}
+              <button
+                on:click|stopPropagation={() => copyToClipboard(nftBuyer)}
+                class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400"
+              >
+                {nftBuyer}
+                <DocumentDuplicateIcon extraClasses="h-3 w-3" />
+              </button>
+            {:else}
+              –
+            {/if}
           </span>
-          <span class="text-sm text-gray-500">
+          <span class="text-sm text-gray-500 flex gap-1">
             <span class="font-bold">Seller:</span>
-            {nftSeller || '–'}
+            {#if nftSeller}
+              <button
+                on:click|stopPropagation={() => copyToClipboard(nftSeller)}
+                class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400"
+              >
+                {nftSeller}
+                <DocumentDuplicateIcon extraClasses="h-3 w-3" />
+              </button>
+            {:else}
+              –
+            {/if}
           </span>
 
           <span class="text-sm text-gray-500 flex gap-1">
             <span class="font-bold"> Signature: </span>
 
-            <a
-              on:click|stopPropagation
-              href={signatureToSolscanLink(signature)}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400 hover:underline"
+            <button
+              on:click|stopPropagation={() => copyToClipboard(signature)}
+              class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400"
             >
               {shortenedSignature}
-              <ArrowTopRightOnSquareIcon extraClasses="h-3 w-3" />
-            </a>
+              <DocumentDuplicateIcon extraClasses="h-3 w-3" />
+            </button>
           </span>
         </div>
       </div>
