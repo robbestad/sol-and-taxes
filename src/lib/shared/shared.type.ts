@@ -198,8 +198,10 @@ export enum TRANSACTION_TAG {
   UNKNOWN = 'UNKNOWN'
 }
 
+/**
+ * UserProfile IS user... nhost auth.user overcomplicated for this kind of auth.
+ */
 export type UserProfile = {
-  userId: string;
   // "wallet" used to distinguish address similar to "user" account.
   walletAddress: string;
   credits: number;

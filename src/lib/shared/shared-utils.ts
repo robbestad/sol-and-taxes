@@ -4,10 +4,8 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { TRANSACTION_TAG } from './shared.type';
 
 export const createSigningMessage = () => `Sign in with Sol and Taxes 
-
-        No password needed.
         
-        Clicking "Sign" or "Approve only means you have proved this wallet is owned by you.
+        Clicking "Sign" or "Approve" only means you have proved this wallet is owned by you.
         
         This request will not trigger any blockchain transaction or cost any gas fee.`;
 
