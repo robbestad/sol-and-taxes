@@ -3,8 +3,31 @@ table:
   schema: public
 configuration:
   column_config:
+    created_at:
+      custom_name: createdAt
+    credits_used:
+      custom_name: creditsUsed
+    updated_at:
+      custom_name: updatedAt
     user_id:
       custom_name: userId
+    wallet_address:
+      custom_name: walletAddress
   custom_column_names:
+    created_at: createdAt
+    credits_used: creditsUsed
+    updated_at: updatedAt
     user_id: userId
-  custom_root_fields: {}
+    wallet_address: walletAddress
+  custom_name: userProfile
+  custom_root_fields:
+    delete: deleteUserProfile
+    delete_by_pk: deleteUserProfileByPk
+    insert: insertUserProfile
+    insert_one: insertUserProfileOne
+    select: userProfile
+    select_aggregate: userProfileAggregate
+    select_by_pk: userProfileByPk
+    select_stream: userProfileStream
+    update: updateUserProfile
+    update_by_pk: updateUserProfileByPk

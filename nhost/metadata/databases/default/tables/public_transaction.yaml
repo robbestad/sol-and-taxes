@@ -1,3 +1,42 @@
 table:
   name: transaction
   schema: public
+configuration:
+  column_config:
+    account_data:
+      custom_name: accountData
+    created_at:
+      custom_name: createdAt
+    fee_payer:
+      custom_name: feePayer
+    native_transfers:
+      custom_name: nativeTransfers
+    token_transfers:
+      custom_name: tokenTransfers
+    transaction_error:
+      custom_name: transactionError
+    updated_at:
+      custom_name: updatedAt
+    user_id:
+      custom_name: userId
+  custom_column_names:
+    account_data: accountData
+    created_at: createdAt
+    fee_payer: feePayer
+    native_transfers: nativeTransfers
+    token_transfers: tokenTransfers
+    transaction_error: transactionError
+    updated_at: updatedAt
+    user_id: userId
+  custom_name: transaction
+  custom_root_fields:
+    delete: deleteTransaction
+    delete_by_pk: deleteTransactionByPk
+    insert: insertTransaction
+    insert_one: insertTransactionOne
+    select: transaction
+    select_aggregate: transactionAggregate
+    select_by_pk: transactionByPk
+    select_stream: transactionStream
+    update: updateTransaction
+    update_by_pk: updateTransactionByPk
