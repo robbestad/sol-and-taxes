@@ -211,12 +211,12 @@ export type UserProfile = {
 };
 
 export type UserSettings = {
-  userId: string;
+  walletAddress: string;
 };
 
 // https://docs.helius.xyz/api-reference/enhanced-transactions-api/parsed-transaction-history
 export type Transaction = {
-  userId: string;
+  walletAddress: string;
   signature: string;
   description: string;
   type: TRANSACTION_TYPE;

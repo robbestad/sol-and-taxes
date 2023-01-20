@@ -68,9 +68,10 @@ export const isWalletConnected$ = derived(walletStore$, (walletStore) => {
 
 export const walletPublicKey$ = derived(
   walletStore$,
-  (walletStore) => walletStore.publicKey
+  (walletStore) => walletStore?.publicKey
 );
 
+// Same as walletAddress... publicKey == address?? nani?
 export const walletPublicKeyAddress$ = derived(walletStore$, (walletStore) => {
   return walletStore?.publicKey?.toString();
 });

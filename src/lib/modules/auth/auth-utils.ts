@@ -19,14 +19,14 @@ import {
   walletPublicKeyAddress$
 } from '$lib/shared/shared.store';
 
-export async function authenticate(publicKeyAddress: string, encodedSignature: string) {
-  const authResponse = await fetch(`/api/auth/authenticate`, {
+const authenticate = async (walletAddress: string, encodedSignature: string) => {
+  const authResponse = await fetch(`/api/authenticate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      publicKeyAddress,
+      walletAddress,
       encodedSignature
     })
   })
@@ -34,9 +34,9 @@ export async function authenticate(publicKeyAddress: string, encodedSignature: s
     .then(readResponseStreamAsJson);
 
   return authResponse;
-}
+};
 
-export async function signIn() {
+export const signIn = async () => {
   const message = new TextEncoder().encode(createSigningMessage());
 
   const publicKey = get(walletPublicKey$);
@@ -74,4 +74,4 @@ export async function signIn() {
 
     return userJwt;
   }
-}
+};

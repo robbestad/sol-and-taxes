@@ -10,8 +10,6 @@ import { createSigningMessage, hasuraGraphqlRequest } from '$lib/shared/shared-u
 import { createJwt, createJwtClaims } from '$lib/modules/auth/jwt-utils';
 import { HASURA_ROLE } from '$lib/shared/shared.type';
 
-// import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
-
 export const POST = async (event: RequestEvent) => {
   const requestBody = await event.request.json();
 
@@ -42,10 +40,10 @@ export const POST = async (event: RequestEvent) => {
       query FetchUserProfile (
         $walletAddress: String!
       ) {
-        userProfile(where: {walletAddress: {_eq: $walletAddress}}) {
-          userId
+        userProfileByPk(
+          walletAddress: $walletAddress
+        ) {
           walletAddress
-          credits
         }
       }
     `,
@@ -55,11 +53,39 @@ export const POST = async (event: RequestEvent) => {
     graphqlEndpoint,
     hasuraJwt
   )
-    .then((response: any) => response?.data?.userProfile?.[0]?.userId)
+    .then((response: any) => response?.data?.userProfileByPk?.walletAddress)
     .catch((error) => {
       throw error;
     });
 
-  // return json(res);
-  return new Response();
+  /**
+   * Create new user
+   */
+  if (!userId) {
+    userId = await hasuraGraphqlRequest(
+      `
+        mutation CreateUser ($walletAddress: String!) {
+          insertUserProfileOne(
+            object: {
+              walletAddress: $walletAddress,
+              credits: 300
+            }
+          ) {
+            walletAddress
+          }
+        }
+      `,
+      {
+        walletAddress
+      },
+      graphqlEndpoint,
+      hasuraJwt
+    )
+      .then((response: any) => response?.data?.insertUserProfileOne?.walletAddress)
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  return json({ userId });
 };

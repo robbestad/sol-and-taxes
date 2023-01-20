@@ -3,6 +3,7 @@
   import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
   import { slide } from 'svelte/transition';
   import Fuse from 'fuse.js';
+  import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
@@ -20,6 +21,7 @@
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
+  import { afterUpdate, onMount } from 'svelte';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -36,8 +38,6 @@
       'events.nft.amount'
     ]
   };
-
-  export let data;
 
   /**
    * UI states
@@ -72,8 +72,24 @@
     );
 
   $: {
-    console.log('transactionHistory: ', transactionHistory);
+    console.log('---regular');
+    console.log('$walletStore$: ', $walletStore$);
+    console.log('$walletStore$.connected: ', $walletStore$.connected);
+    console.log('$walletPublicKey$: ', $walletStore$?.publicKey);
+    console.log('$walletPublicKeyAddress$: ', $walletPublicKeyAddress$);
   }
+
+  onMount(() => {
+    console.log('---onMount');
+    console.log('$walletStore$: ', $walletStore$);
+    console.log('$walletStore$.connected: ', $walletStore$.connected);
+  });
+
+  afterUpdate(() => {
+    console.log('---afterUpdate');
+    console.log('$walletStore$: ', $walletStore$);
+    console.log('$walletStore$.connected: ', $walletStore$.connected);
+  });
 
   const toggleSettings = () => {
     showSettings = !showSettings;

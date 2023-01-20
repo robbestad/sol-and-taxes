@@ -30,26 +30,13 @@
   <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
     <a
-      href="/projects"
+      href="/transactions"
       class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
       aria-current="page"
     >
-      Projects
+      Transactions
     </a>
 
-    <a
-      href={`/usage`}
-      class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-    >
-      Usage
-    </a>
-
-    <a
-      href={'/plans'}
-      class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-    >
-      Plans
-    </a>
     <div class="border-t border-gray-700 pt-4 pb-3">
       <!-- User links -->
       <a
