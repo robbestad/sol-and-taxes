@@ -16,9 +16,9 @@
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
   import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
 
-  import TransactionTimeline from './transaction-timeline/transaction-timeline.svelte';
+  import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
+  import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
-  import Settings from './settings/settings.svelte';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -38,10 +38,19 @@
 
   export let data;
 
-  let searchQuery = '';
-  let isFetchingTransactions;
+  /**
+   * UI states
+   */
   let showSettings = true;
   let showTransactions = true;
+  let isFetchingTransactions;
+
+  /**
+   * Transaction states
+   */
+  let searchQuery = '';
+  let selectedTransactionTypes;
+  let selectedTransactionSources;
 
   $: fuse = new Fuse($transactionHistory$, fuseOptions);
   $: transactionHistory = searchQuery
@@ -198,12 +207,12 @@
   <svelte:fragment slot="page-content">
     {#if showSettings}
       <div transition:slide>
-        <Settings />
+        <TransactionsSettings />
       </div>
     {/if}
 
     {#if $hasTransactionHistory$ && showTransactions}
-      <TransactionTimeline {transactionHistory} />
+      <TransactionsTimeline {transactionHistory} />
     {:else}
       <EmptyState
         {fetchTransactionHistory}
