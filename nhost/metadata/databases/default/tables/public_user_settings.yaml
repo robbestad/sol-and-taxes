@@ -3,10 +3,10 @@ table:
   schema: public
 configuration:
   column_config:
-    user_id:
-      custom_name: userId
+    wallet_address:
+      custom_name: walletAddress
   custom_column_names:
-    user_id: userId
+    wallet_address: walletAddress
   custom_name: userSettings
   custom_root_fields:
     delete: deleteUserSettings
@@ -23,20 +23,20 @@ select_permissions:
   - role: hasura
     permission:
       columns:
-        - user_id
+        - wallet_address
       filter: {}
       allow_aggregations: true
   - role: user
     permission:
       columns:
-        - user_id
+        - wallet_address
       filter:
-        user_id:
+        wallet_address:
           _eq: X-Hasura-User-Id
 delete_permissions:
   - role: user
     permission:
       backend_only: false
       filter:
-        user_id:
+        wallet_address:
           _eq: X-Hasura-User-Id

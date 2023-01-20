@@ -9,15 +9,12 @@ configuration:
       custom_name: creditsUsed
     updated_at:
       custom_name: updatedAt
-    user_id:
-      custom_name: userId
     wallet_address:
       custom_name: walletAddress
   custom_column_names:
     created_at: createdAt
     credits_used: creditsUsed
     updated_at: updatedAt
-    user_id: userId
     wallet_address: walletAddress
   custom_name: userProfile
   custom_root_fields:

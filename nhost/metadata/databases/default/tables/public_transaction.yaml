@@ -17,8 +17,8 @@ configuration:
       custom_name: transactionError
     updated_at:
       custom_name: updatedAt
-    user_id:
-      custom_name: userId
+    wallet_address:
+      custom_name: walletAddress
   custom_column_names:
     account_data: accountData
     created_at: createdAt
@@ -27,7 +27,7 @@ configuration:
     token_transfers: tokenTransfers
     transaction_error: transactionError
     updated_at: updatedAt
-    user_id: userId
+    wallet_address: walletAddress
   custom_name: transaction
   custom_root_fields:
     delete: deleteTransaction
@@ -44,96 +44,96 @@ insert_permissions:
   - role: user
     permission:
       check:
-        user_id:
+        wallet_address:
           _eq: X-Hasura-User-Id
       columns:
-        - fee
-        - slot
-        - timestamp
         - account_data
+        - created_at
+        - description
         - events
+        - fee
+        - fee_payer
         - instructions
         - native_transfers
+        - signature
+        - slot
+        - source
+        - timestamp
         - token_transfers
         - transaction_error
-        - description
-        - fee_payer
-        - signature
-        - source
         - type
-        - created_at
         - updated_at
-        - user_id
+        - wallet_address
 select_permissions:
   - role: hasura
     permission:
       columns:
-        - fee
-        - slot
-        - timestamp
         - account_data
+        - created_at
+        - description
         - events
+        - fee
+        - fee_payer
         - instructions
         - native_transfers
+        - signature
+        - slot
+        - source
+        - timestamp
         - token_transfers
         - transaction_error
-        - description
-        - fee_payer
-        - signature
-        - source
         - type
-        - created_at
         - updated_at
-        - user_id
+        - wallet_address
       filter: {}
       allow_aggregations: true
   - role: user
     permission:
       columns:
-        - fee
-        - slot
-        - timestamp
         - account_data
+        - created_at
+        - description
         - events
+        - fee
+        - fee_payer
         - instructions
         - native_transfers
+        - signature
+        - slot
+        - source
+        - timestamp
         - token_transfers
         - transaction_error
-        - description
-        - fee_payer
-        - signature
-        - source
         - type
-        - created_at
         - updated_at
-        - user_id
+        - wallet_address
       filter:
-        user_id:
+        wallet_address:
           _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
   - role: user
     permission:
       columns:
-        - fee
-        - slot
-        - timestamp
         - account_data
+        - created_at
+        - description
         - events
+        - fee
+        - fee_payer
         - instructions
         - native_transfers
+        - signature
+        - slot
+        - source
+        - timestamp
         - token_transfers
         - transaction_error
-        - description
-        - fee_payer
-        - signature
-        - source
         - type
-        - created_at
         - updated_at
-        - user_id
+        - wallet_address
       filter:
-        user_id:
+        wallet_address:
           _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
@@ -141,5 +141,5 @@ delete_permissions:
     permission:
       backend_only: false
       filter:
-        user_id:
+        wallet_address:
           _eq: X-Hasura-User-Id
