@@ -19,3 +19,24 @@ configuration:
     select_stream: userSettingsStream
     update: updateUserSettings
     update_by_pk: updateUserSettingsByPk
+select_permissions:
+  - role: hasura
+    permission:
+      columns:
+        - user_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: user
+    permission:
+      backend_only: false
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id

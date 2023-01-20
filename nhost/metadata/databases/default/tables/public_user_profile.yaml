@@ -31,3 +31,64 @@ configuration:
     select_stream: userProfileStream
     update: updateUserProfile
     update_by_pk: updateUserProfileByPk
+insert_permissions:
+  - role: hasura
+    permission:
+      check: {}
+      columns:
+        - credits
+        - credits_used
+        - wallet_address
+        - created_at
+        - updated_at
+        - user_id
+select_permissions:
+  - role: hasura
+    permission:
+      columns:
+        - credits
+        - credits_used
+        - wallet_address
+        - created_at
+        - updated_at
+        - user_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - credits
+        - credits_used
+        - wallet_address
+        - created_at
+        - updated_at
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+update_permissions:
+  - role: hasura
+    permission:
+      columns:
+        - created_at
+        - credits
+        - credits_used
+        - updated_at
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - updated_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: {}
+delete_permissions:
+  - role: user
+    permission:
+      backend_only: false
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id

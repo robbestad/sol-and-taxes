@@ -40,3 +40,106 @@ configuration:
     select_stream: transactionStream
     update: updateTransaction
     update_by_pk: updateTransactionByPk
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - fee
+        - slot
+        - timestamp
+        - account_data
+        - events
+        - instructions
+        - native_transfers
+        - token_transfers
+        - transaction_error
+        - description
+        - fee_payer
+        - signature
+        - source
+        - type
+        - created_at
+        - updated_at
+        - user_id
+select_permissions:
+  - role: hasura
+    permission:
+      columns:
+        - fee
+        - slot
+        - timestamp
+        - account_data
+        - events
+        - instructions
+        - native_transfers
+        - token_transfers
+        - transaction_error
+        - description
+        - fee_payer
+        - signature
+        - source
+        - type
+        - created_at
+        - updated_at
+        - user_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - fee
+        - slot
+        - timestamp
+        - account_data
+        - events
+        - instructions
+        - native_transfers
+        - token_transfers
+        - transaction_error
+        - description
+        - fee_payer
+        - signature
+        - source
+        - type
+        - created_at
+        - updated_at
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - fee
+        - slot
+        - timestamp
+        - account_data
+        - events
+        - instructions
+        - native_transfers
+        - token_transfers
+        - transaction_error
+        - description
+        - fee_payer
+        - signature
+        - source
+        - type
+        - created_at
+        - updated_at
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      backend_only: false
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
