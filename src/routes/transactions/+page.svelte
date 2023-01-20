@@ -13,8 +13,6 @@
     walletPublicKeyAddress$
   } from '$lib/shared/shared.store';
   import {
-    DEFAULT_TRANSACTION_SOURCES,
-    DEFAULT_TRANSACTION_TYPES,
     notifcationSettings
   } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
@@ -54,15 +52,28 @@
    * Transaction states
    */
   let searchQuery = '';
-  let selectedTransactionTypes = DEFAULT_TRANSACTION_TYPES;
-  let selectedTransactionSources = DEFAULT_TRANSACTION_SOURCES;
+  let selectedTransactionTypes;
+  let selectedTransactionSources;
 
   $: fuse = new Fuse($transactionHistory$, fuseOptions);
-  $: transactionHistory = searchQuery
-    ? fuse.search(searchQuery).map((result) => result.item)
-    : $transactionHistory$;
+  $: transactionHistory = (
+    searchQuery
+      ? fuse.search(searchQuery).map((result) => result.item)
+      : $transactionHistory$
+  )
+    .filter((transaction) =>
+      selectedTransactionTypes?.length > 0
+        ? selectedTransactionTypes?.includes?.(transaction.type)
+        : true
+    )
+    .filter((transaction) =>
+      selectedTransactionSources?.length > 0
+        ? selectedTransactionSources?.includes?.(transaction.source)
+        : true
+    );
 
   $: {
+    console.log('transactionHistory: ', transactionHistory);
   }
 
   const toggleSettings = () => {

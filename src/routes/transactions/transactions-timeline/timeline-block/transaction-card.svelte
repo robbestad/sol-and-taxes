@@ -61,10 +61,6 @@
    */
   $: tags = tagTransaction(transaction);
 
-  $: {
-    console.log('transaction: ', transaction?.description || 'empty', transaction);
-  }
-
   const toggleExpandDetails = () => {
     isExpanded = !isExpanded;
   };
