@@ -8,7 +8,7 @@ import { MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE } from './transaction-history.
 export const POST = async (event: RequestEvent) => {
   const requestBody = await event.request.json();
 
-  const { address, transactionTypes, transactionsSources } = requestBody;
+  const { address } = requestBody;
 
   console.log('requestBody: ', address);
 

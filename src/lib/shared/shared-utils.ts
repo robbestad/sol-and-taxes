@@ -140,7 +140,6 @@ export const tagTransaction = (transaction: any): string[] => {
   /**
    * NFT events
    */
-  const nftSaleType = transaction?.events?.nft?.saleType || '';
   const nftBuyer = transaction?.events?.nft?.buyer;
   const nftSeller = transaction?.events?.nft?.seller;
   // Some NFT events look like duplicates but the crap copy is missing the buyer/seller
