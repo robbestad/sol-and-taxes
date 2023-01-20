@@ -9,7 +9,8 @@
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
   import {
     hasTransactionHistory$,
-    transactionHistory$
+    transactionHistory$,
+    walletPublicKeyAddress$
   } from '$lib/shared/shared.store';
   import {
     DEFAULT_TRANSACTION_SOURCES,
@@ -45,7 +46,7 @@
   /**
    * UI states
    */
-  let showSettings = true;
+  let showSettings = false;
   let showTransactions = true;
   let isFetchingTransactions;
 
@@ -62,8 +63,6 @@
     : $transactionHistory$;
 
   $: {
-    console.log('selectedTransactionTypes: ', selectedTransactionTypes);
-    console.log('selectedTransactionSources: ', selectedTransactionSources);
   }
 
   const toggleSettings = () => {

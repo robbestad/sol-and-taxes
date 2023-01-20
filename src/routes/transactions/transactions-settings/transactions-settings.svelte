@@ -4,6 +4,9 @@
     TRANSACTION_SOURCE_OPTIONS,
     TRANSACTION_TYPE_OPTIONS
   } from '$lib/shared/shared.constant';
+  import {
+    walletPublicKeyAddress$
+  } from '$lib/shared/shared.store';
 
   export let selectedTransactionTypes;
   export let selectedTransactionSources;
@@ -22,7 +25,7 @@
         name="walletAddress"
         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
       >
-        <option selected>CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2</option>
+        <option selected>{$walletPublicKeyAddress$}</option>
       </select>
     </div>
 
