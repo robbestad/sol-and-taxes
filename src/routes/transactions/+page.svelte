@@ -71,24 +71,23 @@
         : true
     );
 
-  $: {
-    console.log('---regular');
-    console.log('$walletStore$: ', $walletStore$);
-    console.log('$walletStore$.connected: ', $walletStore$.connected);
-    console.log('$walletPublicKey$: ', $walletStore$?.publicKey);
+  onMount(async () => {
     console.log('$walletPublicKeyAddress$: ', $walletPublicKeyAddress$);
-  }
-
-  onMount(() => {
-    console.log('---onMount');
-    console.log('$walletStore$: ', $walletStore$);
-    console.log('$walletStore$.connected: ', $walletStore$.connected);
+    await fetch(`/api/authenticate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        walletAddress: $walletPublicKeyAddress$
+      })
+    });
   });
 
   afterUpdate(() => {
-    console.log('---afterUpdate');
-    console.log('$walletStore$: ', $walletStore$);
-    console.log('$walletStore$.connected: ', $walletStore$.connected);
+    // console.log('---afterUpdate');
+    // console.log('$walletStore$: ', $walletStore$);
+    // console.log('$walletStore$.connected: ', $walletStore$.connected);
   });
 
   const toggleSettings = () => {

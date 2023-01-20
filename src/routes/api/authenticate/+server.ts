@@ -1,12 +1,10 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { json, error } from '@sveltejs/kit';
-import bs58 from 'bs58';
-import { sign } from 'tweetnacl';
 import { PublicKey } from '@solana/web3.js';
 import { NHOST_JWT_SECRET } from '$env/static/private';
 
 import { nhost } from '$lib/core/nhost/nhost';
-import { createSigningMessage, hasuraGraphqlRequest } from '$lib/shared/shared-utils';
+import { hasuraGraphqlRequest } from '$lib/shared/shared-utils';
 import { createJwt, createJwtClaims } from '$lib/modules/auth/jwt-utils';
 import { HASURA_ROLE } from '$lib/shared/shared.type';
 
@@ -16,14 +14,10 @@ export const POST = async (event: RequestEvent) => {
   const { walletAddress } = requestBody;
 
   const publicKey = new PublicKey(walletAddress);
-  const signature = bs58.decode(requestBody.encodedSignature);
-  const message = new TextEncoder().encode(createSigningMessage());
-
-  // @TODO - add a nonce
-  const isVerified = sign.detached.verify(message, signature, publicKey.toBytes());
+  const isVerified = PublicKey.isOnCurve(publicKey);
 
   if (!isVerified) {
-    return error(401, 'Invalid signature');
+    return error(401, 'Invalid');
   }
 
   const graphqlEndpoint = nhost.graphql.getUrl();
