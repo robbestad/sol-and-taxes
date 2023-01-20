@@ -11,7 +11,11 @@
     hasTransactionHistory$,
     transactionHistory$
   } from '$lib/shared/shared.store';
-  import { notifcationSettings } from '$lib/shared/shared.constant';
+  import {
+    DEFAULT_TRANSACTION_SOURCES,
+    DEFAULT_TRANSACTION_TYPES,
+    notifcationSettings
+  } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
   import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
@@ -49,8 +53,8 @@
    * Transaction states
    */
   let searchQuery = '';
-  let selectedTransactionTypes;
-  let selectedTransactionSources;
+  let selectedTransactionTypes = DEFAULT_TRANSACTION_TYPES;
+  let selectedTransactionSources = DEFAULT_TRANSACTION_SOURCES;
 
   $: fuse = new Fuse($transactionHistory$, fuseOptions);
   $: transactionHistory = searchQuery
@@ -58,8 +62,8 @@
     : $transactionHistory$;
 
   $: {
-    console.log('searchQuery: ', searchQuery);
-    console.log('filteredTransactionHistory: ', transactionHistory);
+    console.log('selectedTransactionTypes: ', selectedTransactionTypes);
+    console.log('selectedTransactionSources: ', selectedTransactionSources);
   }
 
   const toggleSettings = () => {
@@ -207,7 +211,10 @@
   <svelte:fragment slot="page-content">
     {#if showSettings}
       <div transition:slide>
-        <TransactionsSettings />
+        <TransactionsSettings
+          bind:selectedTransactionTypes
+          bind:selectedTransactionSources
+        />
       </div>
     {/if}
 

@@ -5,8 +5,8 @@
     TRANSACTION_TYPE_OPTIONS
   } from '$lib/shared/shared.constant';
 
-  let selectedTransactionTypes;
-  let selectedTransactionSources;
+  export let selectedTransactionTypes;
+  export let selectedTransactionSources;
 </script>
 
 <div class="pb-5 mb-5 w-full">
