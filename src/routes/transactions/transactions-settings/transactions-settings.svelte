@@ -4,9 +4,7 @@
     TRANSACTION_SOURCE_OPTIONS,
     TRANSACTION_TYPE_OPTIONS
   } from '$lib/shared/shared.constant';
-  import {
-    walletPublicKeyAddress$
-  } from '$lib/shared/shared.store';
+  import { walletPublicKeyAddress$ } from '$lib/shared/shared.store';
 
   export let selectedTransactionTypes;
   export let selectedTransactionSources;
@@ -41,6 +39,9 @@
           <option value={option.value}>{option.label}</option>
         {/each}
       </MultiSelect>
+      <span>
+        <small class="text-gray-500"> Filters existing transactions by type. </small>
+      </span>
     </div>
 
     <!-- Transaction sources -->
@@ -55,6 +56,9 @@
           <option value={option.value}>{option.label}</option>
         {/each}
       </MultiSelect>
+      <span>
+        <small class="text-gray-500"> Filters existing transactions by source. </small>
+      </span>
     </div>
   </div>
 </div>

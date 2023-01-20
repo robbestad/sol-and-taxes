@@ -6,11 +6,19 @@ import { json } from '@sveltejs/kit';
 import { MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE } from './transaction-history.constant';
 
 export const POST = async (event: RequestEvent) => {
-  console.log('---helius: ', event.request.json());
+  const requestBody = await event.request.json();
 
+  const { address, transactionTypes, transactionsSources } = requestBody;
+
+  console.log('requestBody: ', address);
+
+  /**
+   * Types and source query parameter allow only 1 value each, cannot search by multple types/sources.
+   */
   // const url = `https://api.helius.xyz/v0/addresses/CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2/transactions?api-key=${HELIUS_API_KEY}&until=2psnMHsmaCzPv9ArG4r6NHuQZQWkVuuViDQd3wfXQgjMjZ7xXMVr8DqJD1rS4XzuWTq1KauMNKGQPbd8t8Na14cw`;
-  // const address = `CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2`;
   // const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}`;
+
+  // console.log('url: ', url);
 
   // const res = await fetch(url, {
   //   method: 'GET',
@@ -20,6 +28,8 @@ export const POST = async (event: RequestEvent) => {
   // })
   //   .then(throwIfHttpError)
   //   .then(readResponseStreamAsJson);
+
+  // console.log('res: ', res);
 
   const res = await new Promise((resolve) => {
     setTimeout(() => {

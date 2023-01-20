@@ -82,7 +82,9 @@
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        something: 'good'
+        address: $walletPublicKeyAddress$,
+        transactionTypes: selectedTransactionTypes,
+        transactionSources: selectedTransactionSources
       })
     })
       .then(throwIfHttpError)
