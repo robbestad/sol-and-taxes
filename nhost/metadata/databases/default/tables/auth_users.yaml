@@ -91,6 +91,20 @@ object_relationships:
   - name: defaultRoleByRole
     using:
       foreign_key_constraint_on: default_role
+  - name: userProfile
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_profile
+          schema: public
+  - name: userSettings
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_settings
+          schema: public
 array_relationships:
   - name: refreshTokens
     using:
@@ -113,6 +127,13 @@ array_relationships:
         table:
           name: user_security_keys
           schema: auth
+  - name: transactions
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: transaction
+          schema: public
   - name: userProviders
     using:
       foreign_key_constraint_on:
