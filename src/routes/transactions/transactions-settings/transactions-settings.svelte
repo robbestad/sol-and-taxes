@@ -6,6 +6,7 @@
   } from '$lib/shared/shared.constant';
   import { walletPublicKeyAddress$ } from '$lib/shared/shared.store';
 
+  export let paginationSignature;
   export let selectedTransactionTypes;
   export let selectedTransactionSources;
 </script>
@@ -25,6 +26,32 @@
       >
         <option selected>{$walletPublicKeyAddress$}</option>
       </select>
+    </div>
+
+    <!-- Last transaction -->
+    <div>
+      <label
+        for="paginationSignature"
+        class="block text-sm font-medium text-gray-700"
+      >
+        Last transaction signature
+      </label>
+      <div class="mt-1">
+        <input
+          bind:value={paginationSignature}
+          type="text"
+          name="paginationSignature"
+          id="paginationSignature"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          aria-describedby="pagination-signature"
+        />
+      </div>
+      <span>
+        <small class="text-gray-500">
+          Only transactions before this signature will be fetched. Leave blank to fetch
+          new transactions.
+        </small>
+      </span>
     </div>
 
     <!-- Transaction types -->

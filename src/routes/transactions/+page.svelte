@@ -12,9 +12,7 @@
     transactionHistory$,
     walletPublicKeyAddress$
   } from '$lib/shared/shared.store';
-  import {
-    notifcationSettings
-  } from '$lib/shared/shared.constant';
+  import { notifcationSettings } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
   import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
@@ -52,6 +50,7 @@
    * Transaction states
    */
   let searchQuery = '';
+  let paginationSignature;
   let selectedTransactionTypes;
   let selectedTransactionSources;
 
@@ -224,6 +223,7 @@
     {#if showSettings}
       <div transition:slide>
         <TransactionsSettings
+          bind:paginationSignature
           bind:selectedTransactionTypes
           bind:selectedTransactionSources
         />
