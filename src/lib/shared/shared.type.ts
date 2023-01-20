@@ -197,3 +197,37 @@ export enum TRANSACTION_TAG {
   NFT_SALE = 'NFT_SALE',
   UNKNOWN = 'UNKNOWN'
 }
+
+export type UserProfile = {
+  userId: string;
+  // "wallet" used to distinguish address similar to "user" account.
+  walletAddress: string;
+  credits: number;
+  creditsUsed: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UserSettings = {
+  userId: string;
+};
+
+// https://docs.helius.xyz/api-reference/enhanced-transactions-api/parsed-transaction-history
+export type Transaction = {
+  userId: string;
+  signature: string;
+  description: string;
+  type: TRANSACTION_TYPE;
+  source: TRANSACTION_SOURCE;
+  fee: number;
+  feePayer: string;
+  slot: number;
+  // unix timestamp
+  timestamp: number;
+  nativeTransfers: any[];
+  tokenTransfers: any[];
+  accountData: any[];
+  transactionError: any;
+  instructions: any[];
+  events: any;
+};

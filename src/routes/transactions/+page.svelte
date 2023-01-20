@@ -93,6 +93,7 @@
       },
       body: JSON.stringify({
         address: $walletPublicKeyAddress$,
+        paginationSignature: paginationSignature,
         transactionTypes: selectedTransactionTypes,
         transactionSources: selectedTransactionSources
       })
@@ -110,6 +111,14 @@
     isFetchingTransactions = false;
   };
 </script>
+
+<svelte:head>
+  <title>Sol and Taxes</title>
+  <meta
+    name="description"
+    content="Calculate tax gains and losses straight from your phantom wallet. Analyze all your transactions and get a detailed report to help with your taxes."
+  />
+</svelte:head>
 
 <PageContainer>
   <!-- Page header -->
