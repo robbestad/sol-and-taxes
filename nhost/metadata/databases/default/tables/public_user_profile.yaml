@@ -28,6 +28,16 @@ configuration:
     select_stream: userProfileStream
     update: updateUserProfile
     update_by_pk: updateUserProfileByPk
+array_relationships:
+  - name: transactions
+    using:
+      manual_configuration:
+        column_mapping:
+          wallet_address: wallet_address
+        insertion_order: null
+        remote_table:
+          name: transaction
+          schema: public
 insert_permissions:
   - role: hasura
     permission:

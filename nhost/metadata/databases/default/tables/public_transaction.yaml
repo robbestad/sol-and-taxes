@@ -40,6 +40,16 @@ configuration:
     select_stream: transactionStream
     update: updateTransaction
     update_by_pk: updateTransactionByPk
+object_relationships:
+  - name: userProfile
+    using:
+      manual_configuration:
+        column_mapping:
+          wallet_address: wallet_address
+        insertion_order: null
+        remote_table:
+          name: user_profile
+          schema: public
 insert_permissions:
   - role: user
     permission:

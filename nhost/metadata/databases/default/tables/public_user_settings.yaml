@@ -19,6 +19,16 @@ configuration:
     select_stream: userSettingsStream
     update: updateUserSettings
     update_by_pk: updateUserSettingsByPk
+object_relationships:
+  - name: userProfile
+    using:
+      manual_configuration:
+        column_mapping:
+          wallet_address: wallet_address
+        insertion_order: null
+        remote_table:
+          name: user_profile
+          schema: public
 select_permissions:
   - role: hasura
     permission:
