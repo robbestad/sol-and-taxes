@@ -14,6 +14,10 @@ export enum HASURA_ROLE {
   HASURA = 'hasura'
 }
 
+export enum ERROR {
+  TRANSACTIONS_FETCH = 'TRANSACTIONS_FETCH'
+}
+
 /**
  * https://docs.helius.xyz/api-reference/transaction-types
  *

@@ -11,6 +11,7 @@
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
   import {
+    banners$,
     hasTransactionHistory$,
     transactionHistory$
   } from '$lib/shared/shared.store';
@@ -22,6 +23,7 @@
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
+    import { ERROR } from '$lib/shared/shared.type';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -117,14 +119,31 @@
       })
     })
       .then(throwIfHttpError)
-      .then(readResponseStreamAsJson);
+      .then(readResponseStreamAsJson)
+      .catch((_) => {
+        banners$.update((state) => [
+            ...state.filter((banner) => banner.bannerId !== ERROR.TRANSACTIONS_FETCH),
+            {
+              bannerId: ERROR.TRANSACTIONS_FETCH,
+              title: 'A problem occurred while fetching your transactions',
+              description:
+                'Please refresh the page and try again later, or contact support.'
+            }
+          ]);
+      });
+
+    console.log('response: ', response);
 
     transactionHistory$.set(response);
 
-    addNotification({
-      ...notifcationSettings,
-      text: `${response?.length || 0} Transactions fetched`
-    });
+      if (response) {
+        // await invalidateAll();
+
+        addNotification({
+          ...notifcationSettings,
+          text: `${response?.length || 0} Transactions fetched`
+        });
+      }
 
     isFetchingTransactions = false;
   };
