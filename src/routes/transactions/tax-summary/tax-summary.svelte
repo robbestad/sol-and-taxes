@@ -1,7 +1,15 @@
 <script lang="ts">
+  import { slide } from 'svelte/transition';
+
   export let transactionHistory;
 
+  let showDetails = false;
+
   $: numberOfTransactions = transactionHistory?.length || 0;
+
+  const toggleExpandDetails = () => {
+    showDetails = !showDetails;
+  };
 </script>
 
 <h3 class="text-3xl mb-5 font-medium leading-6 text-gray-900">Tax Summary</h3>
@@ -31,40 +39,37 @@
   </div>
 
   <!-- Details -->
-  <div>
-    <ul
-      role="list"
-      class="divide-y divide-gray-200"
+
+  <ul class="divide-y divide-gray-200">
+    <li
+      on:click={toggleExpandDetails}
+      on:keydown={() => {}}
+      class="py-4 hover:bg-gray-50 hover:cursor-pointer"
     >
-      <li class="py-4">
-        <div class="flex space-x-3">
-          <div class="flex-1 space-y-1">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-medium">Lindsay Walton</h3>
-              <p class="text-sm text-gray-500">1h</p>
-            </div>
-            <p class="text-sm text-gray-500">
-              Deployed Workcation (2d89f0c8 in master) to production
-            </p>
+      <div class="flex space-x-3">
+        <div class="flex-1 space-y-1 px-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-medium">Capital gains</h3>
+            <p class="text-sm text-gray-500">1h</p>
           </div>
         </div>
-      </li>
+      </div>
 
-      <li class="py-4">
-        <div class="flex space-x-3">
+      {#if showDetails}
+        <div
+          transition:slide
+          class="py-4 px-4"
+        >
           <div class="flex-1 space-y-1">
             <div class="flex items-center justify-between">
-              <h3 class="text-sm font-medium">Lindsay Walton</h3>
+              <p class="text-sm text-gray-500">Includes sales of NFTs and tokens.</p>
               <p class="text-sm text-gray-500">1h</p>
             </div>
-            <p class="text-sm text-gray-500">
-              Deployed Workcation (2d89f0c8 in master) to production
-            </p>
           </div>
         </div>
-      </li>
+      {/if}
+    </li>
 
-      <!-- More items... -->
-    </ul>
-  </div>
+    <!-- More items... -->
+  </ul>
 </section>

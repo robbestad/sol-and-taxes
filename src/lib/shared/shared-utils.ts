@@ -130,10 +130,10 @@ export const signatureToSolscanLink = (signature: string) => {
  *
  * @TODO swap events
  */
-export const tagTransaction = (transaction: any): string[] => {
+export const tagTransaction = (transaction: any, walletAddress = ''): string[] => {
   const solAmount = lamportsToSol(transaction?.events?.nft?.amount);
 
-  if (!solAmount) return [];
+  if (!solAmount || !walletAddress) return [];
 
   /**
    * NFT events
@@ -143,11 +143,9 @@ export const tagTransaction = (transaction: any): string[] => {
   // Some NFT events look like duplicates but the crap copy is missing the buyer/seller
   const hasNftBuyerAndSeller = nftBuyer && nftSeller;
   const isNftPurchase =
-    hasNftBuyerAndSeller &&
-    transaction?.events?.nft?.buyer === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
+    hasNftBuyerAndSeller && transaction?.events?.nft?.buyer === walletAddress;
   const isNftSale =
-    hasNftBuyerAndSeller &&
-    transaction?.events?.nft?.seller === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
+    hasNftBuyerAndSeller && transaction?.events?.nft?.seller === walletAddress;
 
   /**
    * Tagging

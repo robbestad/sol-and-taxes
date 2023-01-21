@@ -2,6 +2,7 @@
   import { slide } from 'svelte/transition';
   import { getNotificationsContext } from 'svelte-notifications';
   import { DateTime } from 'luxon';
+  import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
 
   import {
     lamportsToSol,
@@ -49,17 +50,11 @@
   $: nftSeller = transaction?.events?.nft?.seller;
   // Some NFT events look like duplicates but the crap copy is missing the buyer/seller
   $: hasNftBuyerAndSeller = nftBuyer && nftSeller;
-  $: isNftPurchase =
-    hasNftBuyerAndSeller &&
-    transaction?.events?.nft?.buyer === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
-  $: isNftSale =
-    hasNftBuyerAndSeller &&
-    transaction?.events?.nft?.seller === 'CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2';
 
   /**
    * Tags
    */
-  $: tags = tagTransaction(transaction);
+  $: tags = tagTransaction(transaction, $walletStore$?.publicKey?.toString?.());
 
   const toggleExpandDetails = () => {
     isExpanded = !isExpanded;
