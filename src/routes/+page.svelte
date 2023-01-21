@@ -7,7 +7,6 @@
 
   export let data;
 
-  let isLoading;
 </script>
 
 <PageContainer>

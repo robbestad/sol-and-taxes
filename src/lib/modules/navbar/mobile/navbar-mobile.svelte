@@ -1,11 +1,14 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import { goto } from '$app/navigation';
+  import { WalletMultiButton } from '@svelte-on-solana/wallet-adapter-ui';
   import { Popover, PopoverButton } from '@rgossiaux/svelte-headlessui';
+
   import XMarkIcon from '$lib/shared/icons/x-mark-icon.svelte';
   import Bars3Icon from '$lib/shared/icons/bars-3-icon.svelte';
-  import NavbarMobilePanel from './navbar-mobile-panel.svelte';
   import { logoCdnLnk } from '$lib/shared/shared.constant';
+
+  import NavbarMobilePanel from './navbar-mobile-panel.svelte';
 
   export let user = {};
 </script>
@@ -18,9 +21,9 @@
         on:click={() => {
           goto('/');
         }}
-        class="flex items-center"
+        class="flex items-center z-10"
       >
-        <div class="flex justify-center items-center gap-2 flex-shrink-0">
+        <div class="flex justify-center items-center gap-2 flex-shrink-0 z-10">
           <img
             class="h-8 w-8"
             src={logoCdnLnk}
@@ -29,6 +32,9 @@
           <span class="text-xl font-medium text-white"> Sol and Taxes </span>
         </div>
       </button>
+
+      <!-- Temporary position b/c popover keeps closing when clicking on wallet button -->
+      <WalletMultiButton />
 
       <!-- Mobile menu button -->
       <div class="-mr-2 flex md:hidden">

@@ -1,26 +1,27 @@
 <script lang="ts">
-  import { getNotificationsContext } from 'svelte-notifications';
-  import { goto, invalidateAll } from '$app/navigation';
+  // import { getNotificationsContext } from 'svelte-notifications';
 
-  import { nhost } from '$lib/core/nhost/nhost';
-  import { notifcationSettings } from '$lib/shared/shared.constant';
+  // import { goto, invalidateAll } from '$app/navigation';
 
-  const { addNotification } = getNotificationsContext();
+  // import { nhost } from '$lib/core/nhost/nhost';
+  // import { notifcationSettings } from '$lib/shared/shared.constant';
+
+  // const { addNotification } = getNotificationsContext();
 
   export let user = {} as any;
 
-  $: ({ userSettings = {} } = user);
-  $: ({ displayName = '', handle = '' } = userSettings);
+  // $: ({ userSettings = {} } = user);
+  // $: ({ displayName = '', handle = '' } = userSettings);
 
-  const handleSignout = async () => {
-    await nhost.auth.signOut();
-    await invalidateAll();
-    goto('/');
-    addNotification({
-      ...notifcationSettings,
-      text: 'Sign out successful'
-    });
-  };
+  // const handleSignout = async () => {
+  //   await nhost.auth.signOut();
+  //   await invalidateAll();
+  //   goto('/');
+  //   addNotification({
+  //     ...notifcationSettings,
+  //     text: 'Sign out successful'
+  //   });
+  // };
 </script>
 
 <div
@@ -39,18 +40,18 @@
 
     <div class="border-t border-gray-700 pt-4 pb-3">
       <!-- User links -->
-      <a
+      <!-- <a
         href={'/settings'}
         class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
       >
         Settings
-      </a>
+      </a> -->
 
-      <button
+      <!-- <button
         on:click={handleSignout}
         class="w-full flex justify-start items-center rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
         >Sign out</button
-      >
+      > -->
     </div>
   </div>
 </div>
