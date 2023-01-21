@@ -20,6 +20,7 @@
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
+  import TaxReport from './tax-report/tax-report.svelte';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -51,6 +52,7 @@
    * UI states
    */
   let showSettings = false;
+  let showTaxReport = true;
   let showTransactions = true;
   let isFetchingTransactions;
 
@@ -104,6 +106,10 @@
 
   const toggleSettings = () => {
     showSettings = !showSettings;
+  };
+
+  const toggleTaxReport = () => {
+    showTaxReport = !showTaxReport;
   };
 
   const toggleTransactions = () => {
@@ -234,6 +240,14 @@
                   </button>
                   {#if hasInitialTransactionHistory}
                     <button
+                      on:click={toggleTaxReport}
+                      on:click={() => close(null)}
+                      class="w-full flex items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      {showTaxReport ? `Hide tax report` : `Show tax report`}
+                    </button>
+                    <button
                       on:click={toggleTransactions}
                       on:click={() => close(null)}
                       class="w-full flex items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
@@ -290,7 +304,8 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    {#if showSettings || !hasRemainingCredits}
+    <!-- {#if showSettings || !hasRemainingCredits} -->
+    {#if true}
       <div transition:slide>
         <TransactionsSettings
           bind:paginationSignature
@@ -301,9 +316,15 @@
       </div>
     {/if}
 
+    {#if showTaxReport && hasInitialTransactionHistory}
+      <div transition:slide>
+        <TaxReport />
+      </div>
+    {/if}
+
     {#if hasInitialTransactionHistory && showTransactions}
       <TransactionsTimeline {transactionHistory} />
-    {:else}
+    {:else if !hasInitialTransactionHistory}
       <EmptyState
         {fetchTransactionHistory}
         {isFetchingTransactions}
