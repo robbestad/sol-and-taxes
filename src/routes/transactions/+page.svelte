@@ -13,7 +13,8 @@
     SystemProgram,
     Transaction,
     Connection,
-    clusterApiUrl
+    clusterApiUrl,
+    LAMPORTS_PER_SOL
   } from '@solana/web3.js';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
@@ -119,37 +120,11 @@
     showTransactions = !showTransactions;
   };
 
-  // const buyMoreStuff = async () => {
-  //   console.log('hlello');
-  //   console.log('workSpace$: ', $workSpace$.connection);
-  //   let transaction = new Transaction();
-  //   const fromPubkey = $walletStore$.publicKey;
-  //   const toPubkey = new PublicKey('76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8');
-
-  //   if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
-  //     transaction.add(
-  //       SystemProgram.transfer({
-  //         fromPubkey,
-  //         toPubkey,
-  //         lamports: 1000
-  //       })
-  //     );
-
-  //     if (transaction) {
-  //       console.log('hoalla');
-  //       const what = await $walletStore$.signTransaction(transaction);
-  //       console.log('what: ', what);
-  //     }
-
-  //     // await $walletStore$.sendTransaction(transaction, $workSpace$.connection);
-  //   }
-  // };
-
   const buyMoreStuff = async () => {
-    console.log('hlello');
-    console.log('workSpace$: ', $workSpace$.connection);
+    const connection = $workSpace$.connection;
     const fromPubkey = $walletStore$.publicKey;
     const toPubkey = new PublicKey('76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8');
+    const price = LAMPORTS_PER_SOL / 10;
 
     if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
       let transaction = new Transaction();
@@ -157,35 +132,27 @@
         SystemProgram.transfer({
           fromPubkey,
           toPubkey,
-          lamports: 10000000
+          lamports: price
         })
       );
 
-      // let blockConnection = new Connection(clusterApiUrl('devnet'));
-      // let blockhashObj = await blockConnection.getLatestBlockhash('finalized');
-
-      // console.log('1blockhashObj: ', blockhashObj);
-
       transaction.feePayer = fromPubkey;
-      let blockhashObj = await $workSpace$.connection.getLatestBlockhash('finalized');
-      transaction.recentBlockhash = await blockhashObj.blockhash;
-
-      // console.log('blockhashObj: ', blockhashObj);
-
-      // transaction.recentBlockhash = await blockhashObj.blockhash;
-      console.log('blockhashObj: ', blockhashObj);
+      let blockhashResponse = await connection.getLatestBlockhash('finalized');
+      transaction.recentBlockhash = await blockhashResponse.blockhash;
 
       if (transaction) {
-        console.log('hoalla');
         const signed = await $walletStore$.signTransaction(transaction);
-        console.log('signed: ', signed);
-        let signature = await $workSpace$.connection.sendRawTransaction(
-          signed.serialize()
-        );
-        console.log('signature: ', signature);
-        const confirmed = await $workSpace$.connection.confirmTransaction(signature);
+        const signature = await connection.sendRawTransaction(signed.serialize());
+        // const confirmed = await connection.confirmTransaction(signature);
+        const confirmed = await connection.confirmTransaction({
+          blockhash: blockhashResponse.blockhash,
+          lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
+          signature: signature
+        });
+        const confirmedSlot = confirmed.context.slot;
 
         console.log('confirmed: ', confirmed);
+        console.log('confirmedSlot: ', confirmedSlot);
       }
     }
   };
