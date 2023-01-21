@@ -4,6 +4,8 @@
   import { slide } from 'svelte/transition';
   import Fuse from 'fuse.js';
   import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
+  import { afterUpdate } from 'svelte';
+  import { invalidateAll } from '$app/navigation';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
@@ -21,7 +23,6 @@
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
-  import { afterUpdate, onMount } from 'svelte';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -39,6 +40,14 @@
     ]
   };
 
+  export let data;
+
+  // refers only to initialization of page, which means triggering data-initialization in layout
+  let isInitialized = false;
+
+  $: {
+    console.log('data: ', data);
+  }
   /**
    * UI states
    */
@@ -71,23 +80,17 @@
         : true
     );
 
-  onMount(async () => {
-    console.log('$walletPublicKeyAddress$: ', $walletPublicKeyAddress$);
-    await fetch(`/api/authenticate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        walletAddress: $walletPublicKeyAddress$
-      })
-    });
-  });
-
-  afterUpdate(() => {
-    // console.log('---afterUpdate');
-    // console.log('$walletStore$: ', $walletStore$);
-    // console.log('$walletStore$.connected: ', $walletStore$.connected);
+  afterUpdate(async () => {
+    if (
+      $walletStore$.connected &&
+      !data?.userProfile?.walletAddress &&
+      !isInitialized
+    ) {
+      isInitialized = true;
+      await invalidateAll();
+    } else if ($walletStore$.connected && !data?.userProfile?.walletAddress) {
+      isInitialized = true;
+    }
   });
 
   const toggleSettings = () => {

@@ -33,12 +33,16 @@ events
  * QUERIES ==================================================
  * //////////////////////////////////////////////////////////
  */
-export const userDataQuery = `
-  query FetchUserData ($walletAddress: String!) {
+export const userProfileQuery = `
+  query FetchUserProfile ($walletAddress: String!) {
     userProfileByPk(walletAddress: $walletAddress) {
       ${userProfileFields}
     }
-    
+  }
+`;
+
+export const userTransactionsQuery = `
+  query FetchUserTransactions ($walletAddress: String!) {
     transaction(
       where: {
         walletAddress: {
