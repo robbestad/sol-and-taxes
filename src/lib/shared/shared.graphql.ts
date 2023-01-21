@@ -60,3 +60,32 @@ export const userTransactionsQuery = `
  * MUTATIONS ================================================
  * //////////////////////////////////////////////////////////
  */
+export const insertTransactions = `
+  mutation InsertTransactions (
+    $walletAddress: String!,
+    $transactions: [transaction_insert_input!]!,
+    $creditsIncrement: Int,
+    $creditsDecrement: Int,
+  ) {
+    insertTransaction(
+      objects: $transactions, 
+      on_conflict: {
+        constraint: transaction_pkey, 
+        update_columns: []
+      }
+    ) {
+      returning {
+        ${transactionFields}
+      }
+    }
+    updateUserProfileByPk(
+      pk_columns: {walletAddress: $walletAddress},
+      _inc: {
+        credits: $creditsDecrement, 
+        creditsUsed: $creditsIncrement
+      }
+    ) {
+      ${userProfileFields}
+    }
+  }
+`;

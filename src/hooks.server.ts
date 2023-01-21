@@ -139,7 +139,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         hasuraJwt
       )
         .then((response: any) => response?.data?.insertUserProfileOne?.walletAddress)
-        .catch((error) => {
+        .catch((_) => {
           throw new Error('Error creating new user');
         });
     }

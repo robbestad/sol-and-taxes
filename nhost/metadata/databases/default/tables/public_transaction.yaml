@@ -51,6 +51,27 @@ object_relationships:
           name: user_profile
           schema: public
 insert_permissions:
+  - role: hasura
+    permission:
+      check: {}
+      columns:
+        - fee
+        - slot
+        - timestamp
+        - account_data
+        - events
+        - instructions
+        - native_transfers
+        - token_transfers
+        - transaction_error
+        - description
+        - fee_payer
+        - signature
+        - source
+        - type
+        - wallet_address
+        - created_at
+        - updated_at
   - role: user
     permission:
       check:
@@ -122,6 +143,28 @@ select_permissions:
           _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
+  - role: hasura
+    permission:
+      columns:
+        - fee
+        - slot
+        - timestamp
+        - account_data
+        - events
+        - instructions
+        - native_transfers
+        - token_transfers
+        - transaction_error
+        - description
+        - fee_payer
+        - signature
+        - source
+        - type
+        - wallet_address
+        - created_at
+        - updated_at
+      filter: {}
+      check: null
   - role: user
     permission:
       columns:

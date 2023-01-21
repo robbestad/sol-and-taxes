@@ -8,7 +8,7 @@ import { userTransactionsQuery } from '$lib/shared/shared.graphql';
 export const GET = async (event: RequestEvent) => {
   const { userProfile, userJwt } = event.locals;
 
-  if (!userProfile?.walletAddress || !userJwt) return error(401, 'Invalid');
+  if (!userProfile?.walletAddress || !userJwt) throw error(401, 'Invalid');
 
   const graphqlEndpoint = nhost.graphql.getUrl();
 
