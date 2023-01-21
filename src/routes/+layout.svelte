@@ -29,9 +29,7 @@
 </script>
 
 <svelte:head>
-  <title>
-    Sol and Taxes – Crypto gains and losses tax calculator for Solana wallets
-  </title>
+  <title>Sol and Taxes – Tax calculator for solana wallets</title>
   <meta
     name="description"
     content="Calculate tax gains and losses straight from your phantom wallet. Analyze all your transactions and get a detailed report to help with your taxes."

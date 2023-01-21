@@ -52,12 +52,11 @@
                 <h1
                   class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl"
                 >
-                  Data to enrich your online business
+                  Calculate crypto taxes straight from your wallet
                 </h1>
                 <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem
-                  cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat
-                  aliqua.
+                  Connect your wallet and calculate capital gains from all your
+                  transactions.
                 </p>
                 <div class="mt-8 flex gap-x-4 sm:justify-center">
                   <WalletMultiButton />
