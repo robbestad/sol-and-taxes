@@ -12,8 +12,6 @@
     PublicKey,
     SystemProgram,
     Transaction,
-    Connection,
-    clusterApiUrl,
     LAMPORTS_PER_SOL
   } from '@solana/web3.js';
 
@@ -128,6 +126,8 @@
 
     if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
       let transaction = new Transaction();
+
+      transaction.feePayer = fromPubkey;
       transaction.add(
         SystemProgram.transfer({
           fromPubkey,
@@ -136,24 +136,20 @@
         })
       );
 
-      transaction.feePayer = fromPubkey;
-      let blockhashResponse = await connection.getLatestBlockhash('finalized');
+      const blockhashResponse = await connection.getLatestBlockhash('finalized');
       transaction.recentBlockhash = await blockhashResponse.blockhash;
 
-      if (transaction) {
-        const signed = await $walletStore$.signTransaction(transaction);
-        const signature = await connection.sendRawTransaction(signed.serialize());
-        // const confirmed = await connection.confirmTransaction(signature);
-        const confirmed = await connection.confirmTransaction({
-          blockhash: blockhashResponse.blockhash,
-          lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
-          signature: signature
-        });
-        const confirmedSlot = confirmed.context.slot;
+      const signed = await $walletStore$.signTransaction(transaction);
+      const signature = await connection.sendRawTransaction(signed.serialize());
+      const confirmed = await connection.confirmTransaction({
+        blockhash: blockhashResponse.blockhash,
+        lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
+        signature: signature
+      });
+      const confirmedSlot = confirmed.context.slot;
 
-        console.log('confirmed: ', confirmed);
-        console.log('confirmedSlot: ', confirmedSlot);
-      }
+      console.log('confirmed: ', confirmed);
+      console.log('confirmedSlot: ', confirmedSlot);
     }
   };
 
