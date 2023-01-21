@@ -7,7 +7,7 @@ import { nhost } from '$lib/core/nhost/nhost';
 
 import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
 import { MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE } from './transaction-history.constant';
-import { insertTransactions } from '$lib/shared/shared.graphql';
+import { insertTransactions, mockTransactionsQuery } from '$lib/shared/shared.graphql';
 
 export const POST = async (event: RequestEvent) => {
   const requestBody = await event.request.json();
@@ -23,30 +23,44 @@ export const POST = async (event: RequestEvent) => {
   /**
    * Types and source query parameter allow only 1 value each, cannot search by multple types/sources.
    */
-  const beforeQuery = paginationSignature ? `&before=${paginationSignature}` : '';
-  // const url = `https://api.helius.xyz/v0/addresses/CQtTxnRfFYYQm7fvVb91Y8MYHu6P8UhWvxo7KeXe2NP2/transactions?api-key=${HELIUS_API_KEY}&until=2psnMHsmaCzPv9ArG4r6NHuQZQWkVuuViDQd3wfXQgjMjZ7xXMVr8DqJD1rS4XzuWTq1KauMNKGQPbd8t8Na14cw`;
-  const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}${beforeQuery}`;
 
-  // console.log('url: ', url);
+  /**
+   * Production
+   */
+  // const beforeQuery = paginationSignature ? `&before=${paginationSignature}` : '';
+  // const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}${beforeQuery}`;
 
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(throwIfHttpError)
-    .then(readResponseStreamAsJson);
+  // const res = await fetch(url, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   }
+  // })
+  //   .then(throwIfHttpError)
+  //   .then(readResponseStreamAsJson);
 
-  // console.log('res: ', res);
-
+  /**
+   * Mock
+   */
   // const res = (await new Promise((resolve) => {
   //   setTimeout(() => {
   //     resolve(MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE);
   //   }, 1000);
   // })) as any;
 
-  const theRes = res.map((transaction) => {
+  /**
+   * Mock with db fetch
+   */
+  const res = (await hasuraGraphqlRequest(
+    mockTransactionsQuery,
+    {
+      walletAddress
+    },
+    nhost.graphql.getUrl(),
+    hasuraJwt
+  )) as any;
+
+  const withWalletAddress = res.map((transaction) => {
     return {
       ...transaction,
       walletAddress
@@ -59,7 +73,7 @@ export const POST = async (event: RequestEvent) => {
     insertTransactions,
     {
       walletAddress,
-      transactions: theRes,
+      transactions: withWalletAddress,
       creditsIncrement: 100,
       creditsDecrement: -100
     },
@@ -69,5 +83,5 @@ export const POST = async (event: RequestEvent) => {
 
   console.log('dbResponse: ', dbResponse);
 
-  return json(theRes);
+  return json(withWalletAddress);
 };

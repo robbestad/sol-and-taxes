@@ -56,6 +56,21 @@ export const userTransactionsQuery = `
 `;
 
 /**
+ * Not really a mock but serves as a mock.
+ */
+export const mockTransactionsQuery = `
+  query FetchUserTransactions ($walletAddress: String!) {
+    transaction(
+      where: {
+        walletAddress: {_eq: $walletAddress}
+      }
+    ) {
+      ${transactionFields}
+    }
+  }
+`;
+
+/**
  * //////////////////////////////////////////////////////////
  * MUTATIONS ================================================
  * //////////////////////////////////////////////////////////
