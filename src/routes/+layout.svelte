@@ -2,7 +2,13 @@
   import { onMount } from 'svelte';
   import Notifications from 'svelte-notifications';
   import Modal from 'svelte-simple-modal';
-  import { WalletProvider } from '@svelte-on-solana/wallet-adapter-ui';
+  import {
+    WalletProvider,
+    ConnectionProvider
+  } from '@svelte-on-solana/wallet-adapter-ui';
+  // import { AnchorConnectionProvider } from '@svelte-on-solana/wallet-adapter-anchor';
+  import { clusterApiUrl } from '@solana/web3.js';
+
   // import { AnchorConnectionProvider } from '@svelte-on-solana/wallet-adapter-anchor';
 
   import Toast from '$lib/modules/toast/toast.svelte';
@@ -11,6 +17,7 @@
 
   let _Toast = Toast;
   let wallets;
+  const network = clusterApiUrl('devnet');
 
   const localStorageKey = 'solWalletAdapter';
 
@@ -37,11 +44,13 @@
     unstyled={false}
     styleWindow={{ width: '75%' }}
   >
+    <ConnectionProvider {network} />
     <WalletProvider
       {localStorageKey}
       {wallets}
       autoConnect
     />
+
     <slot />
   </Modal>
 </Notifications>

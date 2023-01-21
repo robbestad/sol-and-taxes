@@ -16,7 +16,7 @@ export const POST = async (event: RequestEvent) => {
   const { userProfile, hasuraJwt } = event.locals;
   const { walletAddress, credits = 0 } = userProfile || {};
 
-  if (!address || !walletAddress || credits < 100) {
+  if (!address || !walletAddress || credits <= 0) {
     throw error(401, 'Invalid');
   }
 
