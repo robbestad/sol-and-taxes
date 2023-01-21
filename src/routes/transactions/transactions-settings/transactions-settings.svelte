@@ -5,10 +5,12 @@
     TRANSACTION_TYPE_OPTIONS
   } from '$lib/shared/shared.constant';
 
-  export let walletAddress;
+  export let userProfile;
   export let paginationSignature;
   export let selectedTransactionTypes;
   export let selectedTransactionSources;
+
+  $: ({ walletAddress } = userProfile);
 </script>
 
 <div class="pb-5 mb-5 w-full">
@@ -49,7 +51,7 @@
       <span>
         <small class="text-gray-500">
           Only transactions before this signature will be fetched. Leave blank to fetch
-          new transactions.
+          latest transactions.
         </small>
       </span>
     </div>

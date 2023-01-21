@@ -1,7 +1,7 @@
 <script lang="ts">
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
 
-  export let data;
+  export let userProfile;
   export let fetchTransactionHistory;
   export let isFetchingTransactions = false;
 </script>
@@ -34,7 +34,7 @@
         <LoadingButtonSpinnerIcon />
         Fetch transactions
       </button>
-    {:else if !data?.userProfile?.walletAddress}
+    {:else if !userProfile?.walletAddress}
       <button
         disabled
         type="button"

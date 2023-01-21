@@ -41,6 +41,8 @@
 
   // refers only to initialization of page, which means triggering data-initialization in layout
   let isInitialized = false;
+  // @TODO do better please...it's too frayed
+  let hasSetInitialPaginationSignature = false;
 
   $: {
     console.log('data: ', data);
@@ -87,6 +89,13 @@
     } else if ($walletStore$.connected && !userProfile?.walletAddress) {
       isInitialized = true;
     }
+
+    if (!hasSetInitialPaginationSignature && hasInitialTransactionHistory) {
+      hasSetInitialPaginationSignature = true;
+      paginationSignature =
+        initialTransactionHistory?.[initialTransactionHistory.length - 1]?.signature ||
+        '';
+    }
   });
 
   const toggleSettings = () => {
@@ -129,6 +138,9 @@
 
     if (response) {
       await invalidateAll();
+
+      paginationSignature = response?.[response.length - 1]?.signature;
+      hasSetInitialPaginationSignature = true;
 
       addNotification({
         ...notifcationSettings,
@@ -272,7 +284,7 @@
           bind:paginationSignature
           bind:selectedTransactionTypes
           bind:selectedTransactionSources
-          walletAddress={userProfile?.walletAddress}
+          {userProfile}
         />
       </div>
     {/if}
@@ -283,7 +295,7 @@
       <EmptyState
         {fetchTransactionHistory}
         {isFetchingTransactions}
-        {data}
+        {userProfile}
       />
     {/if}
   </svelte:fragment>
