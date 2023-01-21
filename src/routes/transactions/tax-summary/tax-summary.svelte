@@ -4,12 +4,17 @@
   import { slide } from 'svelte/transition';
   import { DateTime } from 'luxon';
   import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
+  import { getNotificationsContext } from 'svelte-notifications';
 
   import { TRANSACTION_TYPE } from '$lib/shared/shared.type';
   import { unixTimestampToDate, shortenLongWord } from '$lib/shared/shared-utils';
   import { SOL_USD_DAILY_AVERAGE_2021 } from '$lib/shared/price-reference/sol-usd-daily-average-2021.constant';
   import { SOL_USD_DAILY_AVERAGE_2022 } from '$lib/shared/price-reference/sol-usd-daily-average-2022.constant';
   import { SOL_USD_DAILY_AVERAGE_2023 } from '$lib/shared/price-reference/sol-usd-daily-average-2023.constant';
+  import { notifcationSettings } from '$lib/shared/shared.constant';
+  import DocumentDuplicateIcon from '$lib/shared/icons/document-duplicate-icon.svelte';
+
+  const { addNotification } = getNotificationsContext();
 
   export let transactionHistory;
 
@@ -66,6 +71,15 @@
   const toggleExpandDetails = () => {
     showDetails = !showDetails;
   };
+
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+
+    addNotification({
+      ...notifcationSettings,
+      text: 'Copied'
+    });
+  };
 </script>
 
 <h3 class="text-3xl mb-5 font-medium leading-6 text-gray-900">Tax summary</h3>
@@ -120,8 +134,15 @@
           <div class="flex-1 space-y-1">
             {#each capitalGains as { amount, isoDate, usdPrice, usdGains, signature, shortenedSignature }}
               <div class="flex items-center justify-between">
-                <p class="text-sm text-gray-500">
-                  {shortenedSignature} for {amount} SOL on {isoDate}
+                <p class="flex gap-1 text-sm text-gray-500">
+                  <button
+                    on:click|stopPropagation={() => copyToClipboard(signature)}
+                    class="flex gap-1 items-center text-sm text-gray-500 hover:text-blue-400"
+                  >
+                    {shortenedSignature}
+                    <DocumentDuplicateIcon extraClasses="h-3 w-3" />
+                  </button>
+                  for {amount} SOL on {isoDate}
                 </p>
                 <p class="text-sm text-gray-500">${usdGains}</p>
               </div>
