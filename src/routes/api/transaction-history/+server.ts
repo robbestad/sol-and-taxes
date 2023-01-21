@@ -11,6 +11,7 @@ export const POST = async (event: RequestEvent) => {
   const { address, paginationSignature = '' } = requestBody;
 
   console.log('requestBody: ', address);
+  console.log('event.locals: ', event.locals);
 
   /**
    * Types and source query parameter allow only 1 value each, cannot search by multple types/sources.

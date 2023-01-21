@@ -13,7 +13,6 @@
   import {
     hasTransactionHistory$,
     transactionHistory$,
-    walletPublicKeyAddress$
   } from '$lib/shared/shared.store';
   import { notifcationSettings } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
@@ -107,10 +106,11 @@
     const response = await fetch(`/api/transaction-history`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'wallet-address': data?.userProfile?.walletAddress || ''
       },
       body: JSON.stringify({
-        address: $walletPublicKeyAddress$,
+        address: data?.userProfile?.walletAddress,
         paginationSignature: paginationSignature,
         transactionTypes: selectedTransactionTypes,
         transactionSources: selectedTransactionSources
@@ -253,6 +253,7 @@
           bind:paginationSignature
           bind:selectedTransactionTypes
           bind:selectedTransactionSources
+          walletAddress={data?.userProfile?.walletAddress}
         />
       </div>
     {/if}
