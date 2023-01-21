@@ -9,7 +9,7 @@ export const notifcationSettings = {
   removeAfter: 2500
 };
 
-export const appWalletAddress = `76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8`;
+export const appWalletAddress = `H9WkayXQGQpypA3rBSFKF1iRq7dyrN7Mo99CLvG8M6og`;
 
 // https://docs.helius.xyz/api-reference/transaction-types
 export const TRANSACTION_TYPE_TO_SOURCE = {

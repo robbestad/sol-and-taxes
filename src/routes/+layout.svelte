@@ -6,10 +6,7 @@
     WalletProvider,
     ConnectionProvider
   } from '@svelte-on-solana/wallet-adapter-ui';
-  // import { AnchorConnectionProvider } from '@svelte-on-solana/wallet-adapter-anchor';
   import { clusterApiUrl } from '@solana/web3.js';
-
-  // import { AnchorConnectionProvider } from '@svelte-on-solana/wallet-adapter-anchor';
 
   import Toast from '$lib/modules/toast/toast.svelte';
 
@@ -17,7 +14,7 @@
 
   let _Toast = Toast;
   let wallets;
-  const network = clusterApiUrl('devnet');
+  const network = clusterApiUrl('mainnet-beta');
 
   const localStorageKey = 'solWalletAdapter';
 
@@ -32,7 +29,7 @@
   <title>Sol and Taxes – Tax calculator for solana wallets</title>
   <meta
     name="description"
-    content="Calculate tax gains and losses straight from your phantom wallet. Analyze all your transactions and get a detailed report to help with your taxes."
+    content="Calculate tax gains and losses straight from your wallet. Analyze all your transactions and get a detailed report to help with your taxes."
   />
 </svelte:head>
 

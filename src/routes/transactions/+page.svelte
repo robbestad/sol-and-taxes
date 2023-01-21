@@ -45,9 +45,6 @@
   // @TODO do better please...it's too frayed
   let hasSetInitialPaginationSignature = false;
 
-  $: {
-    console.log('data: ', data);
-  }
   /**
    * UI states
    */
@@ -168,7 +165,7 @@
   <title>Sol and Taxes</title>
   <meta
     name="description"
-    content="Calculate tax gains and losses straight from your phantom wallet. Analyze all your transactions and get a detailed report to help with your taxes."
+    content="Calculate tax gains and losses straight from your wallet. Analyze all your transactions and get a detailed report to help with your taxes."
   />
 </svelte:head>
 
