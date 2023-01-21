@@ -20,7 +20,7 @@
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
-  import TaxReport from './tax-report/tax-report.svelte';
+  import TaxSummary from './tax-summary/tax-summary.svelte';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -52,7 +52,7 @@
    * UI states
    */
   let showSettings = false;
-  let showTaxReport = true;
+  let showTaxSummary = true;
   let showTransactions = true;
   let isFetchingTransactions;
 
@@ -108,8 +108,8 @@
     showSettings = !showSettings;
   };
 
-  const toggleTaxReport = () => {
-    showTaxReport = !showTaxReport;
+  const toggleTaxSummary = () => {
+    showTaxSummary = !showTaxSummary;
   };
 
   const toggleTransactions = () => {
@@ -123,10 +123,12 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'wallet-address': userProfile?.walletAddress || ''
+        'wallet-address':
+          userProfile?.walletAddress || $walletStore$.publicKey?.toString?.() || ''
       },
       body: JSON.stringify({
-        address: userProfile?.walletAddress,
+        address:
+          userProfile?.walletAddress || $walletStore$.publicKey?.toString?.() || '',
         paginationSignature: paginationSignature,
         transactionTypes: selectedTransactionTypes,
         transactionSources: selectedTransactionSources
@@ -240,12 +242,12 @@
                   </button>
                   {#if hasInitialTransactionHistory}
                     <button
-                      on:click={toggleTaxReport}
+                      on:click={toggleTaxSummary}
                       on:click={() => close(null)}
                       class="w-full flex items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
-                      {showTaxReport ? `Hide tax report` : `Show tax report`}
+                      {showTaxSummary ? `Hide tax report` : `Show tax report`}
                     </button>
                     <button
                       on:click={toggleTransactions}
@@ -304,8 +306,7 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    <!-- {#if showSettings || !hasRemainingCredits} -->
-    {#if true}
+    {#if showSettings || !hasRemainingCredits}
       <div transition:slide>
         <TransactionsSettings
           bind:paginationSignature
@@ -316,9 +317,9 @@
       </div>
     {/if}
 
-    {#if showTaxReport && hasInitialTransactionHistory}
+    {#if showTaxSummary && hasInitialTransactionHistory}
       <div transition:slide>
-        <TaxReport />
+        <TaxSummary />
       </div>
     {/if}
 

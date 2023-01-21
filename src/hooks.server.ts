@@ -84,9 +84,6 @@ export const handle: Handle = async ({ event, resolve }) => {
       NHOST_JWT_SECRET
     );
 
-    /**
-     * Fetch/create user
-     */
     const graphqlEndpoint = nhost.graphql.getUrl();
 
     /**

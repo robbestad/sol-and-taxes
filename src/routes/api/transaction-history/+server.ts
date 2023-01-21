@@ -84,7 +84,5 @@ export const POST = async (event: RequestEvent) => {
     hasuraJwt
   );
 
-  console.log('dbResponse: ', dbResponse);
-
   return json(withWalletAddress);
 };
