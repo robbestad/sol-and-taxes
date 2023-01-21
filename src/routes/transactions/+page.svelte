@@ -6,14 +6,6 @@
   import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
   import { afterUpdate } from 'svelte';
   import { invalidateAll } from '$app/navigation';
-  import { workSpace as workSpace$ } from '@svelte-on-solana/wallet-adapter-ui';
-
-  import {
-    PublicKey,
-    SystemProgram,
-    Transaction,
-    LAMPORTS_PER_SOL
-  } from '@solana/web3.js';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
@@ -116,41 +108,6 @@
 
   const toggleTransactions = () => {
     showTransactions = !showTransactions;
-  };
-
-  const buyMoreStuff = async () => {
-    const connection = $workSpace$.connection;
-    const fromPubkey = $walletStore$.publicKey;
-    const toPubkey = new PublicKey('76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8');
-    const price = LAMPORTS_PER_SOL / 10;
-
-    if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
-      let transaction = new Transaction();
-
-      transaction.feePayer = fromPubkey;
-      transaction.add(
-        SystemProgram.transfer({
-          fromPubkey,
-          toPubkey,
-          lamports: price
-        })
-      );
-
-      const blockhashResponse = await connection.getLatestBlockhash('finalized');
-      transaction.recentBlockhash = await blockhashResponse.blockhash;
-
-      const signed = await $walletStore$.signTransaction(transaction);
-      const signature = await connection.sendRawTransaction(signed.serialize());
-      const confirmed = await connection.confirmTransaction({
-        blockhash: blockhashResponse.blockhash,
-        lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
-        signature: signature
-      });
-      const confirmedSlot = confirmed.context.slot;
-
-      console.log('confirmed: ', confirmed);
-      console.log('confirmedSlot: ', confirmedSlot);
-    }
   };
 
   const fetchTransactionHistory = async () => {
@@ -301,13 +258,21 @@
 
               Fetch transactions
             </button>
-          {:else if !userProfile?.walletAddress || !hasRemainingCredits}
+          {:else if !userProfile?.walletAddress}
             <button
-              on:click={buyMoreStuff}
+              disabled
               type="button"
-              class="inline-flex gap-1 opacity-50 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="inline-flex gap-1 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Fetch transactions
+            </button>
+          {:else if !hasRemainingCredits}
+            <button
+              disabled
+              type="button"
+              class="inline-flex gap-1 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Out of credits
             </button>
           {:else}
             <button
@@ -325,7 +290,7 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    {#if true}
+    {#if showSettings || !hasRemainingCredits}
       <div transition:slide>
         <TransactionsSettings
           bind:paginationSignature
