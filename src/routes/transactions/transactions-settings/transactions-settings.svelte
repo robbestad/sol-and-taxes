@@ -117,6 +117,7 @@
 
 <div class="pb-5 mb-5 w-full">
   <div class="mt-3 flex flex-col gap-4 sm:mt-0 sm:ml-4">
+    <h3 class="text-3xl font-medium leading-6 text-gray-900">Settings</h3>
     <!-- Credits -->
     <div class="flex gap-3">
       <div

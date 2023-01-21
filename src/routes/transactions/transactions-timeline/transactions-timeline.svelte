@@ -28,6 +28,8 @@
   }, []);
 </script>
 
+<h3 class="text-3xl mb-5 font-medium leading-6 text-gray-900">Transactions</h3>
+
 <ul>
   {#each transactionHistoryByDay as dailyBlock}
     <TimelineBlock {dailyBlock} />
