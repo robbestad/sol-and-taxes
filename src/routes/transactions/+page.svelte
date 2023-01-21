@@ -15,11 +15,11 @@
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
   import MagnifyingGlassIcon from '$lib/shared/icons/magnifying-glass-icon.svelte';
+  import { ERROR } from '$lib/shared/shared.type';
 
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
-  import { ERROR } from '$lib/shared/shared.type';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -60,11 +60,14 @@
   let selectedTransactionTypes;
   let selectedTransactionSources;
 
-  $: fuse = new Fuse(data.transactionHistory, fuseOptions);
+  $: ({ transactionHistory: initialTransactionHistory, userProfile } = data);
+  $: hasInitialTransactionHistory = initialTransactionHistory?.length > 0;
+
+  $: fuse = new Fuse(initialTransactionHistory, fuseOptions);
   $: transactionHistory = (
     searchQuery
       ? fuse.search(searchQuery).map((result) => result.item)
-      : data.transactionHistory
+      : initialTransactionHistory
   )
     ?.filter?.((transaction) =>
       selectedTransactionTypes?.length > 0
@@ -78,14 +81,10 @@
     );
 
   afterUpdate(async () => {
-    if (
-      $walletStore$.connected &&
-      !data?.userProfile?.walletAddress &&
-      !isInitialized
-    ) {
+    if ($walletStore$.connected && !userProfile?.walletAddress && !isInitialized) {
       isInitialized = true;
       await invalidateAll();
-    } else if ($walletStore$.connected && !data?.userProfile?.walletAddress) {
+    } else if ($walletStore$.connected && !userProfile?.walletAddress) {
       isInitialized = true;
     }
   });
@@ -105,10 +104,10 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'wallet-address': data?.userProfile?.walletAddress || ''
+        'wallet-address': userProfile?.walletAddress || ''
       },
       body: JSON.stringify({
-        address: data?.userProfile?.walletAddress,
+        address: userProfile?.walletAddress,
         paginationSignature: paginationSignature,
         transactionTypes: selectedTransactionTypes,
         transactionSources: selectedTransactionSources
@@ -127,8 +126,6 @@
           }
         ]);
       });
-
-    console.log('response: ', response);
 
     if (response) {
       await invalidateAll();
@@ -158,7 +155,7 @@
       <svelte:fragment slot="primary-action">
         <div class="flex items-center gap-2">
           <!-- Search -->
-          {#if data?.transactionHistory?.length > 0}
+          {#if hasInitialTransactionHistory}
             <div
               class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end"
             >
@@ -219,7 +216,7 @@
                   >
                     {showSettings ? `Hide settings` : `Show settings`}
                   </button>
-                  {#if data?.transactionHistory?.length > 0}
+                  {#if hasInitialTransactionHistory}
                     <button
                       on:click={toggleTransactions}
                       on:click={() => close(null)}
@@ -245,7 +242,7 @@
 
               Fetch transactions
             </button>
-          {:else if !data?.userProfile?.walletAddress}
+          {:else if !userProfile?.walletAddress}
             <button
               disabled
               type="button"
@@ -275,12 +272,12 @@
           bind:paginationSignature
           bind:selectedTransactionTypes
           bind:selectedTransactionSources
-          walletAddress={data?.userProfile?.walletAddress}
+          walletAddress={userProfile?.walletAddress}
         />
       </div>
     {/if}
 
-    {#if data?.transactionHistory?.length > 0 && showTransactions}
+    {#if hasInitialTransactionHistory && showTransactions}
       <TransactionsTimeline {transactionHistory} />
     {:else}
       <EmptyState
