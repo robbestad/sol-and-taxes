@@ -325,7 +325,7 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    {#if showSettings}
+    {#if true}
       <div transition:slide>
         <TransactionsSettings
           bind:paginationSignature

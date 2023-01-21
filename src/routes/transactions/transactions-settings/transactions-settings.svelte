@@ -10,11 +10,37 @@
   export let selectedTransactionTypes;
   export let selectedTransactionSources;
 
-  $: ({ walletAddress } = userProfile);
+  $: ({ walletAddress, credits } = userProfile);
 </script>
 
 <div class="pb-5 mb-5 w-full">
   <div class="mt-3 flex flex-col gap-4 sm:mt-0 sm:ml-4">
+    <!-- Credits -->
+    <div class="flex gap-3">
+      <div
+        class="overflow-hidden w-full sm:w-1/2 rounded-lg bg-white px-4 py-5 border border-gray-200 shadow-sm sm:p-6"
+      >
+        <dt class="truncate text-sm font-medium text-gray-500">Credits remaining</dt>
+        <dd class="mt-1  text-3xl font-semibold tracking-tight text-gray-900">
+          {credits}
+        </dd>
+      </div>
+      <div
+        class="overflow-hidden w-full sm:w-1/2 rounded-lg bg-white px-4 py-5 border border-gray-200 shadow-sm sm:p-6"
+      >
+        <dd class="mt-1 text-sm tracking-tight text-gray-500">
+          Fetching transactions uses 100 credits and returns ~80 transactions each time.
+          1,000 credits costs 0.1 SOL.
+        </dd>
+        <button
+          type="button"
+          class="inline-flex mt-2 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Buy 1,000 credits
+        </button>
+      </div>
+    </div>
+
     <!-- Wallet address -->
     <div>
       <label
