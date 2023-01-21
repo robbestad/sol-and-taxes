@@ -7,7 +7,10 @@ import { nhost } from '$lib/core/nhost/nhost';
 
 import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
 import { MOCK_PARSED_TRANSACTION_HISTORY_RESPONSE } from './transaction-history.constant';
-import { insertTransactions, mockTransactionsQuery } from '$lib/shared/shared.graphql';
+import {
+  insertTransactionsQuery,
+  mockTransactionsQuery
+} from '$lib/shared/shared.graphql';
 
 export const POST = async (event: RequestEvent) => {
   const requestBody = await event.request.json();
@@ -60,7 +63,7 @@ export const POST = async (event: RequestEvent) => {
     hasuraJwt
   )) as any;
 
-  const withWalletAddress = res.map((transaction) => {
+  const withWalletAddress = res?.data?.transaction.map((transaction) => {
     return {
       ...transaction,
       walletAddress
@@ -70,7 +73,7 @@ export const POST = async (event: RequestEvent) => {
   const graphqlEndpoint = nhost.graphql.getUrl();
 
   const dbResponse = await hasuraGraphqlRequest(
-    insertTransactions,
+    insertTransactionsQuery,
     {
       walletAddress,
       transactions: withWalletAddress,

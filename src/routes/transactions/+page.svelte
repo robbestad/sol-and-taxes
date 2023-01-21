@@ -4,7 +4,7 @@
   import { slide } from 'svelte/transition';
   import Fuse from 'fuse.js';
   import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
-  import { afterUpdate, onMount } from 'svelte';
+  import { afterUpdate } from 'svelte';
   import { invalidateAll } from '$app/navigation';
 
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
@@ -85,21 +85,6 @@
         ? selectedTransactionSources?.includes?.(transaction.source)
         : true
     );
-
-  $: {
-    console.log(
-      'selectedTransactionTypes: ',
-      selectedTransactionTypes,
-      selectedTransactionTypes?.length
-    );
-    console.log(
-      'selectedTransactionSources: ',
-      selectedTransactionSources,
-      selectedTransactionSources?.length
-    );
-    console.log('initialTransactionHistory: ', initialTransactionHistory);
-    console.log('transactionHistory: ', transactionHistory);
-  }
 
   afterUpdate(async () => {
     if ($walletStore$.connected && !userProfile?.walletAddress && !isInitialized) {

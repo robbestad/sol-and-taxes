@@ -75,7 +75,7 @@ export const mockTransactionsQuery = `
  * MUTATIONS ================================================
  * //////////////////////////////////////////////////////////
  */
-export const insertTransactions = `
+export const insertTransactionsQuery = `
   mutation InsertTransactions (
     $walletAddress: String!,
     $transactions: [transaction_insert_input!]!,
@@ -98,6 +98,22 @@ export const insertTransactions = `
       _inc: {
         credits: $creditsDecrement, 
         creditsUsed: $creditsIncrement
+      }
+    ) {
+      ${userProfileFields}
+    }
+  }
+`;
+
+export const increaseUserProfileCreditsQuery = `
+  mutation IncreaseUserProfileCredits (
+    $walletAddress: String!,
+    $creditsIncrement: Int
+  ) {
+    updateUserProfileByPk(
+      pk_columns: {walletAddress: $walletAddress},
+      _inc: {
+        credits: $creditsIncrement
       }
     ) {
       ${userProfileFields}

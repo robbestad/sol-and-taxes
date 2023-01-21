@@ -7,55 +7,112 @@
     Transaction,
     LAMPORTS_PER_SOL
   } from '@solana/web3.js';
+  import { getNotificationsContext } from 'svelte-notifications';
+  import { invalidateAll } from '$app/navigation';
 
   import MultiSelect from '$lib/shared/form/multi-select.svelte';
+  import { banners$ } from '$lib/shared/shared.store';
+  import { ERROR } from '$lib/shared/shared.type';
   import {
+    appWalletAddress,
+    notifcationSettings,
     TRANSACTION_SOURCE_OPTIONS,
     TRANSACTION_TYPE_OPTIONS
   } from '$lib/shared/shared.constant';
-  import { onMount } from 'svelte';
+  import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
+
+  const { addNotification } = getNotificationsContext();
 
   export let userProfile;
   export let paginationSignature;
   export let selectedTransactionTypes;
   export let selectedTransactionSources;
 
+  let isBuyingCredits = false;
+
   $: ({ walletAddress, credits } = userProfile || {});
 
-  // const buyMoreStuff = async () => {
-  //   const connection = $workSpace$.connection;
-  //   const fromPubkey = $walletStore$.publicKey;
-  //   const toPubkey = new PublicKey('76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8');
-  //   const price = LAMPORTS_PER_SOL / 10;
+  const buyMoreCredits = async () => {
+    isBuyingCredits = true;
 
-  //   if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
-  //     let transaction = new Transaction();
+    /**
+     * Transaction
+     */
+    const connection = $workSpace$.connection;
+    const fromPubkey = $walletStore$.publicKey;
+    const toPubkey = new PublicKey(appWalletAddress);
+    const price = LAMPORTS_PER_SOL / 10;
 
-  //     transaction.feePayer = fromPubkey;
-  //     transaction.add(
-  //       SystemProgram.transfer({
-  //         fromPubkey,
-  //         toPubkey,
-  //         lamports: price
-  //       })
-  //     );
+    if (!fromPubkey || !toPubkey || !$walletStore$ || !$walletStore$.signTransaction) {
+      isBuyingCredits = false;
+      return;
+    }
 
-  //     const blockhashResponse = await connection.getLatestBlockhash('finalized');
-  //     transaction.recentBlockhash = await blockhashResponse.blockhash;
+    let transaction = new Transaction();
 
-  //     const signed = await $walletStore$.signTransaction(transaction);
-  //     const signature = await connection.sendRawTransaction(signed.serialize());
-  //     const confirmed = await connection.confirmTransaction({
-  //       blockhash: blockhashResponse.blockhash,
-  //       lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
-  //       signature: signature
-  //     });
-  //     const confirmedSlot = confirmed.context.slot;
+    transaction.feePayer = fromPubkey;
+    transaction.add(
+      SystemProgram.transfer({
+        fromPubkey,
+        toPubkey,
+        lamports: price
+      })
+    );
 
-  //     console.log('confirmed: ', confirmed);
-  //     console.log('confirmedSlot: ', confirmedSlot);
-  //   }
-  // };
+    const blockhashResponse = await connection.getLatestBlockhash('finalized');
+    transaction.recentBlockhash = await blockhashResponse.blockhash;
+
+    const signed = await $walletStore$.signTransaction(transaction);
+    const signature = await connection.sendRawTransaction(signed.serialize());
+    const confirmed = await connection.confirmTransaction({
+      blockhash: blockhashResponse.blockhash,
+      lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
+      signature: signature
+    });
+    const confirmedSlot = confirmed.context.slot;
+
+    if (!confirmedSlot) {
+      isBuyingCredits = false;
+      return;
+    }
+
+    /**
+     * Add credits to account
+     */
+    const response = await fetch(`/api/credit-purchase`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'wallet-address': fromPubkey?.toString?.() || ''
+      },
+      body: JSON.stringify({
+        payeeAddress: toPubkey?.toString?.()
+      })
+    })
+      .then(throwIfHttpError)
+      .then(readResponseStreamAsJson)
+      .catch((_) => {
+        banners$.update((state) => [
+          ...state.filter((banner) => banner.bannerId !== ERROR.CREDITS_PURCHASE),
+          {
+            bannerId: ERROR.CREDITS_PURCHASE,
+            title: 'A problem occurred while purchasing your credits',
+            description: 'Please contact support at ktruong008@gmail.com'
+          }
+        ]);
+      });
+
+    if (response) {
+      await invalidateAll();
+
+      addNotification({
+        ...notifcationSettings,
+        text: `1,000 Credits purchased`
+      });
+    }
+
+    isBuyingCredits = false;
+  };
 </script>
 
 <div class="pb-5 mb-5 w-full">
@@ -78,6 +135,7 @@
           1,000 credits costs 0.1 SOL.
         </dd>
         <button
+          on:click={buyMoreCredits}
           type="button"
           class="inline-flex mt-2 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >

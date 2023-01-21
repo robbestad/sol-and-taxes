@@ -9,6 +9,8 @@ export const notifcationSettings = {
   removeAfter: 2500
 };
 
+export const appWalletAddress = `76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8`;
+
 // https://docs.helius.xyz/api-reference/transaction-types
 export const TRANSACTION_TYPE_TO_SOURCE = {
   NFT_MINT: [
