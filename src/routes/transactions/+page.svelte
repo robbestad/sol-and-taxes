@@ -10,11 +10,7 @@
   import PageContainer from '$lib/modules/page-container/page-container.svelte';
   import PageHeader from '$lib/modules/page-header/page-header.svelte';
   import { readResponseStreamAsJson, throwIfHttpError } from '$lib/shared/shared-utils';
-  import {
-    banners$,
-    hasTransactionHistory$,
-    transactionHistory$
-  } from '$lib/shared/shared.store';
+  import { banners$ } from '$lib/shared/shared.store';
   import { notifcationSettings } from '$lib/shared/shared.constant';
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
   import ChevronDownIcon from '$lib/shared/icons/chevron-down-icon.svelte';
@@ -23,7 +19,7 @@
   import TransactionsTimeline from './transactions-timeline/transactions-timeline.svelte';
   import TransactionsSettings from './transactions-settings/transactions-settings.svelte';
   import EmptyState from './empty-state.svelte';
-    import { ERROR } from '$lib/shared/shared.type';
+  import { ERROR } from '$lib/shared/shared.type';
 
   const { addNotification } = getNotificationsContext();
   const fuseOptions = {
@@ -64,18 +60,18 @@
   let selectedTransactionTypes;
   let selectedTransactionSources;
 
-  $: fuse = new Fuse($transactionHistory$, fuseOptions);
+  $: fuse = new Fuse(data.transactionHistory, fuseOptions);
   $: transactionHistory = (
     searchQuery
       ? fuse.search(searchQuery).map((result) => result.item)
-      : $transactionHistory$
+      : data.transactionHistory
   )
-    .filter((transaction) =>
+    ?.filter?.((transaction) =>
       selectedTransactionTypes?.length > 0
         ? selectedTransactionTypes?.includes?.(transaction.type)
         : true
     )
-    .filter((transaction) =>
+    ?.filter?.((transaction) =>
       selectedTransactionSources?.length > 0
         ? selectedTransactionSources?.includes?.(transaction.source)
         : true
@@ -122,28 +118,26 @@
       .then(readResponseStreamAsJson)
       .catch((_) => {
         banners$.update((state) => [
-            ...state.filter((banner) => banner.bannerId !== ERROR.TRANSACTIONS_FETCH),
-            {
-              bannerId: ERROR.TRANSACTIONS_FETCH,
-              title: 'A problem occurred while fetching your transactions',
-              description:
-                'Please refresh the page and try again later, or contact support.'
-            }
-          ]);
+          ...state.filter((banner) => banner.bannerId !== ERROR.TRANSACTIONS_FETCH),
+          {
+            bannerId: ERROR.TRANSACTIONS_FETCH,
+            title: 'A problem occurred while fetching your transactions',
+            description:
+              'Please refresh the page and try again later, or contact support.'
+          }
+        ]);
       });
 
     console.log('response: ', response);
 
-    transactionHistory$.set(response);
+    if (response) {
+      await invalidateAll();
 
-      if (response) {
-        // await invalidateAll();
-
-        addNotification({
-          ...notifcationSettings,
-          text: `${response?.length || 0} Transactions fetched`
-        });
-      }
+      addNotification({
+        ...notifcationSettings,
+        text: `${response?.length || 0} Transactions fetched`
+      });
+    }
 
     isFetchingTransactions = false;
   };
@@ -164,7 +158,7 @@
       <svelte:fragment slot="primary-action">
         <div class="flex items-center gap-2">
           <!-- Search -->
-          {#if $hasTransactionHistory$}
+          {#if data?.transactionHistory?.length > 0}
             <div
               class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end"
             >
@@ -225,7 +219,7 @@
                   >
                     {showSettings ? `Hide settings` : `Show settings`}
                   </button>
-                  {#if $hasTransactionHistory$}
+                  {#if data?.transactionHistory?.length > 0}
                     <button
                       on:click={toggleTransactions}
                       on:click={() => close(null)}
@@ -286,7 +280,7 @@
       </div>
     {/if}
 
-    {#if $hasTransactionHistory$ && showTransactions}
+    {#if data?.transactionHistory?.length > 0 && showTransactions}
       <TransactionsTimeline {transactionHistory} />
     {:else}
       <EmptyState

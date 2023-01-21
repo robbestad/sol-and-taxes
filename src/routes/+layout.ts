@@ -27,6 +27,6 @@ export const load = async () => {
 
   return {
     userProfile,
-    transactions
+    transactionHistory: transactions
   };
 };
