@@ -30,17 +30,17 @@ export const POST = async (event: RequestEvent) => {
   /**
    * Production
    */
-  // const beforeQuery = paginationSignature ? `&before=${paginationSignature}` : '';
-  // const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}${beforeQuery}`;
+  const beforeQuery = paginationSignature ? `&before=${paginationSignature}` : '';
+  const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}${beforeQuery}`;
 
-  // const res = await fetch(url, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   }
-  // })
-  //   .then(throwIfHttpError)
-  //   .then(readResponseStreamAsJson);
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(throwIfHttpError)
+    .then(readResponseStreamAsJson);
 
   /**
    * Mock
@@ -54,16 +54,23 @@ export const POST = async (event: RequestEvent) => {
   /**
    * Mock with db fetch
    */
-  const res = (await hasuraGraphqlRequest(
-    mockTransactionsQuery,
-    {
-      walletAddress
-    },
-    nhost.graphql.getUrl(),
-    hasuraJwt
-  )) as any;
+  // const res = (await hasuraGraphqlRequest(
+  //   mockTransactionsQuery,
+  //   {
+  //     walletAddress
+  //   },
+  //   nhost.graphql.getUrl(),
+  //   hasuraJwt
+  // )) as any;
 
-  const withWalletAddress = res?.data?.transaction.map((transaction) => {
+  // const withWalletAddress = res?.data?.transaction.map((transaction) => {
+  //   return {
+  //     ...transaction,
+  //     walletAddress
+  //   };
+  // });
+
+  const withWalletAddress = res?.map?.((transaction) => {
     return {
       ...transaction,
       walletAddress
@@ -72,7 +79,7 @@ export const POST = async (event: RequestEvent) => {
 
   const graphqlEndpoint = nhost.graphql.getUrl();
 
-  const dbResponse = await hasuraGraphqlRequest(
+  await hasuraGraphqlRequest(
     insertTransactionsQuery,
     {
       walletAddress,

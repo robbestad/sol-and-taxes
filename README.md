@@ -21,7 +21,7 @@ Crypto gains and losses tax calculator for Solana wallets.
 
 - Update & switch `.env` (dev to prod)
 - Build & push Docker images (dependencies & server)
-- Update K8s files
+- Update K8s yaml
 - Deploy `nhost` branch (if required)
 - Deploy K8s updates
 
