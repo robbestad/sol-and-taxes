@@ -13,6 +13,7 @@
     TRANSACTION_SOURCE_OPTIONS,
     TRANSACTION_TYPE_OPTIONS
   } from '$lib/shared/shared.constant';
+  import { onMount } from 'svelte';
 
   export let userProfile;
   export let paginationSignature;
@@ -21,40 +22,40 @@
 
   $: ({ walletAddress, credits } = userProfile || {});
 
-  const buyMoreStuff = async () => {
-    const connection = $workSpace$.connection;
-    const fromPubkey = $walletStore$.publicKey;
-    const toPubkey = new PublicKey('76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8');
-    const price = LAMPORTS_PER_SOL / 10;
+  // const buyMoreStuff = async () => {
+  //   const connection = $workSpace$.connection;
+  //   const fromPubkey = $walletStore$.publicKey;
+  //   const toPubkey = new PublicKey('76d9ReYnFSYJWc5MGniWSU6XAkj95hrUTMscrL7eTsH8');
+  //   const price = LAMPORTS_PER_SOL / 10;
 
-    if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
-      let transaction = new Transaction();
+  //   if (fromPubkey && toPubkey && $walletStore$ && $walletStore$.signTransaction) {
+  //     let transaction = new Transaction();
 
-      transaction.feePayer = fromPubkey;
-      transaction.add(
-        SystemProgram.transfer({
-          fromPubkey,
-          toPubkey,
-          lamports: price
-        })
-      );
+  //     transaction.feePayer = fromPubkey;
+  //     transaction.add(
+  //       SystemProgram.transfer({
+  //         fromPubkey,
+  //         toPubkey,
+  //         lamports: price
+  //       })
+  //     );
 
-      const blockhashResponse = await connection.getLatestBlockhash('finalized');
-      transaction.recentBlockhash = await blockhashResponse.blockhash;
+  //     const blockhashResponse = await connection.getLatestBlockhash('finalized');
+  //     transaction.recentBlockhash = await blockhashResponse.blockhash;
 
-      const signed = await $walletStore$.signTransaction(transaction);
-      const signature = await connection.sendRawTransaction(signed.serialize());
-      const confirmed = await connection.confirmTransaction({
-        blockhash: blockhashResponse.blockhash,
-        lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
-        signature: signature
-      });
-      const confirmedSlot = confirmed.context.slot;
+  //     const signed = await $walletStore$.signTransaction(transaction);
+  //     const signature = await connection.sendRawTransaction(signed.serialize());
+  //     const confirmed = await connection.confirmTransaction({
+  //       blockhash: blockhashResponse.blockhash,
+  //       lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
+  //       signature: signature
+  //     });
+  //     const confirmedSlot = confirmed.context.slot;
 
-      console.log('confirmed: ', confirmed);
-      console.log('confirmedSlot: ', confirmedSlot);
-    }
-  };
+  //     console.log('confirmed: ', confirmed);
+  //     console.log('confirmedSlot: ', confirmedSlot);
+  //   }
+  // };
 </script>
 
 <div class="pb-5 mb-5 w-full">
@@ -132,7 +133,6 @@
         for="transactionTypes"
         class="block text-sm font-medium text-gray-700">Transaction types</label
       >
-
       <MultiSelect bind:value={selectedTransactionTypes}>
         {#each TRANSACTION_TYPE_OPTIONS as option}
           <option value={option.value}>{option.label}</option>
@@ -149,7 +149,6 @@
         for="transactionSources"
         class="block text-sm font-medium text-gray-700">Transaction sources</label
       >
-
       <MultiSelect bind:value={selectedTransactionSources}>
         {#each TRANSACTION_SOURCE_OPTIONS as option}
           <option value={option.value}>{option.label}</option>

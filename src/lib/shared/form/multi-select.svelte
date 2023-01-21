@@ -12,7 +12,7 @@
   let input,
     inputValue,
     options = [],
-    activeOption,
+    activeOption = null,
     showOptions = false,
     selected = {},
     first = true,
@@ -25,11 +25,16 @@
       o.selected && !value.includes(o.value) && (value = [...value, o.value]);
       options = [...options, { value: o.value, name: o.textContent }];
     });
-    value &&
-      (selected = options.reduce(
-        (obj, op) => (value.includes(op.value) ? { ...obj, [op.value]: op } : obj),
-        {}
-      ));
+    /**
+     * This block selects 1st option by default, bugs out the app b/c unwanted filter
+     *
+     * Not sure why value is populated in the first place when it should be undefined
+     */
+    // value &&
+    //   (selected = options.reduce(
+    //     (obj, op) => (value.includes(op.value) ? { ...obj, [op.value]: op } : obj),
+    //     {}
+    //   ));
     first = false;
   });
 
