@@ -1,8 +1,8 @@
 import { TRANSACTION_SOURCE, TRANSACTION_TYPE } from './shared.type';
 
-export const logoCdnLnk = `https://keylayapps.nyc3.cdn.digitaloceanspaces.com/beepbooply/beepbooply%20-%20512px.png`;
+export const logoCdnLnk = `https://keylayapps.nyc3.cdn.digitaloceanspaces.com/sol-and-taxes/sol-and-taxes-logo.png`;
 
-export const discordLink = `https://discord.gg/sw8qnwKwhX`;
+export const githubLink = 'https://github.com/KTruong008/sol-and-taxes';
 
 export const notifcationSettings = {
   position: 'bottom-center',

@@ -89,9 +89,10 @@
   <div class="border-b border-gray-200 bg-white py-5">
     <div class="flex flex-col gap-4">
       <p class="text-gray-500">
-        Tax calculations are still experimental and are not official and definitely may
-        not be correct. Calculations do not include adjusted cost basis or losses at
-        this time. Please consult a tax professional for assistance.
+        Tax calculations are still experimental and <span class="font-bold">
+          definitely may not be correct.
+        </span> Calculations do not include adjusted cost basis or losses at this time. Please
+        consult a tax professional for assistance.
       </p>
 
       <div class="flex gap-2">
