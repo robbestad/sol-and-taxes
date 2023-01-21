@@ -1,6 +1,6 @@
 # sol-and-taxes production
 # Dependencies
-FROM ktruong008/sol-and-taxes-dependencies:1.0.0 as dependencies
+FROM ktruong008/sol-and-taxes-dependencies:1.0.2 as dependencies
 
 # Build
 FROM node:18.12.1-alpine3.15 as node-build
