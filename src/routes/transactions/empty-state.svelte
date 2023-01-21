@@ -1,6 +1,7 @@
 <script lang="ts">
   import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
 
+  export let data;
   export let fetchTransactionHistory;
   export let isFetchingTransactions = false;
 </script>
@@ -31,6 +32,14 @@
         class="inline-flex gap-1 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
         <LoadingButtonSpinnerIcon />
+        Fetch transactions
+      </button>
+    {:else if !data?.userProfile?.walletAddress}
+      <button
+        disabled
+        type="button"
+        class="inline-flex gap-1 disabled:opacity-50 items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
         Fetch transactions
       </button>
     {:else}
