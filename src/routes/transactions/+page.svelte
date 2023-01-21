@@ -319,7 +319,7 @@
 
     {#if showTaxSummary && hasInitialTransactionHistory}
       <div transition:slide>
-        <TaxSummary />
+        <TaxSummary {transactionHistory} />
       </div>
     {/if}
 
