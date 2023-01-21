@@ -20,10 +20,13 @@ Crypto gains and losses tax calculator for Solana wallets.
 ## Deployment checklist
 
 - Update & switch `.env` (dev to prod)
+- Update network to `mainnet-beta`
+- Update `transaction-history/+server.ts` mocks to live
 - Build & push Docker images (dependencies & server)
-- Update K8s yaml
+- Update K8s files
 - Deploy `nhost` branch (if required)
 - Deploy K8s updates
+- Test
 
 ## Deployment commands
 
