@@ -55,8 +55,7 @@
                   Calculate crypto taxes straight from your wallet
                 </h1>
                 <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                  Connect your wallet and calculate capital gains from all your
-                  transactions.
+                  Connect your wallet and calculate gains from all your transactions.
                 </p>
                 <div class="mt-8 flex gap-x-4 sm:justify-center">
                   <WalletMultiButton />
