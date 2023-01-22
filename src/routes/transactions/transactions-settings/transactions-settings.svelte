@@ -59,16 +59,58 @@
       })
     );
 
-    const blockhashResponse = await connection.getLatestBlockhash('finalized');
-    transaction.recentBlockhash = await blockhashResponse.blockhash;
+    const { blockhashResponse } = await fetch(`/api/rpc/latest-blockhash`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'wallet-address': fromPubkey?.toString?.() || ''
+      }
+    })
+      .then(throwIfHttpError)
+      .then(readResponseStreamAsJson)
+      .catch((_) => {
+        banners$.update((state) => [
+          ...state.filter((banner) => banner.bannerId !== ERROR.LATEST_BLOCKHASH_FETCH),
+          {
+            bannerId: ERROR.LATEST_BLOCKHASH_FETCH,
+            title:
+              'A problem occurred while purchasing your credits (could not fetch latest blockhash)',
+            description: 'Please contact support at ktruong008@gmail.com'
+          }
+        ]);
+      });
+
+    transaction.recentBlockhash = blockhashResponse.blockhash;
 
     const signed = await $walletStore$.signTransaction(transaction);
-    const signature = await connection.sendRawTransaction(signed.serialize());
-    const confirmed = await connection.confirmTransaction({
-      blockhash: blockhashResponse.blockhash,
-      lastValidBlockHeight: blockhashResponse.lastValidBlockHeight,
-      signature: signature
-    });
+
+    const { confirmed } = await fetch(`/api/rpc/transaction-send-and-confirm`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'wallet-address': fromPubkey?.toString?.() || ''
+      },
+      body: JSON.stringify({
+        signedSerialized: signed.serialize(),
+        blockhashResponse
+      })
+    })
+      .then(throwIfHttpError)
+      .then(readResponseStreamAsJson)
+      .catch((_) => {
+        banners$.update((state) => [
+          ...state.filter(
+            (banner) => banner.bannerId !== ERROR.TRANSACTION_SEND_AND_CONFIRM
+          ),
+          {
+            bannerId: ERROR.TRANSACTION_SEND_AND_CONFIRM,
+            title:
+              'A problem occurred while purchasing your credits (could not send and confirm transaction)',
+            description: 'Please contact support at ktruong008@gmail.com'
+          }
+        ]);
+      });
+
     const confirmedSlot = confirmed.context.slot;
 
     if (!confirmedSlot) {
@@ -137,8 +179,9 @@
         </dd>
         <button
           on:click={buyMoreCredits}
+          disabled={isBuyingCredits}
           type="button"
-          class="inline-flex mt-2 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="inline-flex disabled:opacity-50 mt-2 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Buy 1,000 credits
         </button>

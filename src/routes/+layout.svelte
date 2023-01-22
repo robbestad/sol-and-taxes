@@ -49,12 +49,12 @@
     unstyled={false}
     styleWindow={{ width: '75%' }}
   >
-    <ConnectionProvider {network} />
     <WalletProvider
       {localStorageKey}
       {wallets}
       autoConnect
     />
+    <ConnectionProvider {network} />
 
     <slot />
   </Modal>
