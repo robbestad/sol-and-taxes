@@ -11,6 +11,7 @@
   import { invalidateAll } from '$app/navigation';
 
   import MultiSelect from '$lib/shared/form/multi-select.svelte';
+  import LoadingButtonSpinnerIcon from '$lib/shared/icons/loading-button-spinner-icon.svelte';
   import { banners$ } from '$lib/shared/shared.store';
   import { ERROR } from '$lib/shared/shared.type';
   import {
@@ -82,7 +83,9 @@
 
     transaction.recentBlockhash = blockhashResponse.blockhash;
 
-    const signed = await $walletStore$.signTransaction(transaction);
+    const signed = (await $walletStore$.signTransaction(transaction).catch(() => {
+      isBuyingCredits = false;
+    })) as any;
 
     const { confirmed } = await fetch(`/api/rpc/transaction-send-and-confirm`, {
       method: 'POST',
@@ -181,9 +184,15 @@
           on:click={buyMoreCredits}
           disabled={isBuyingCredits}
           type="button"
-          class="inline-flex disabled:opacity-50 mt-2 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="inline-flex gap-1 disabled:opacity-50 mt-2 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          {isBuyingCredits ? `Purchasing...` : `Buy 1,000 credits for 0.1 SOL`}
+          {#if isBuyingCredits}
+            <LoadingButtonSpinnerIcon extraClasses="text-gray-500" /><span
+              >Purchasing...</span
+            >
+          {:else}
+            Buy 1,000 credits for 0.1 SOL
+          {/if}
         </button>
       </div>
     </div>
