@@ -7,6 +7,8 @@
     ConnectionProvider
   } from '@svelte-on-solana/wallet-adapter-ui';
   import { clusterApiUrl } from '@solana/web3.js';
+  import { browser } from '$app/environment';
+  import { Buffer } from 'buffer';
 
   import Toast from '$lib/modules/toast/toast.svelte';
 
@@ -14,9 +16,17 @@
 
   let _Toast = Toast;
   let wallets;
+
   const network = clusterApiUrl('mainnet-beta');
+  // const network = clusterApiUrl('devnet');
 
   const localStorageKey = 'solWalletAdapter';
+
+  $: {
+    if (browser) {
+      window.Buffer = Buffer;
+    }
+  }
 
   onMount(async () => {
     const { PhantomWalletAdapter } = await import('@solana/wallet-adapter-wallets');
