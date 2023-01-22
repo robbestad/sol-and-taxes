@@ -303,7 +303,7 @@
 
   <!-- Page content -->
   <svelte:fragment slot="page-content">
-    {#if showSettings || !hasRemainingCredits}
+    {#if showSettings || (typeof hasRemainingCredits === 'number' && !isNaN(hasRemainingCredits) && !hasRemainingCredits)}
       <div transition:slide>
         <TransactionsSettings
           bind:paginationSignature

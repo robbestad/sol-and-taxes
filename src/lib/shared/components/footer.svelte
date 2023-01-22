@@ -1,6 +1,7 @@
 <script lang="ts">
+  import DiscordIcon from '../icons/discord-icon.svelte';
   import GithubIcon from '../icons/github-icon.svelte';
-  import { githubLink } from '../shared.constant';
+  import { discordLink, githubLink } from '../shared.constant';
 </script>
 
 <footer class="bottom-0 bg-white">
@@ -11,6 +12,15 @@
       </div>
     </nav> -->
     <div class="mt-8 flex justify-center space-x-6">
+      <a
+        href={discordLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-gray-400 hover:text-gray-500"
+      >
+        <span class="sr-only">Discord</span>
+        <DiscordIcon />
+      </a>
       <a
         href={githubLink}
         target="_blank"

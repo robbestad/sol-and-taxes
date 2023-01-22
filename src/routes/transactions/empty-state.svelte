@@ -24,8 +24,10 @@
   </svg>
   <h3 class="mt-2 text-sm font-medium text-gray-900">No transactions</h3>
   <p class="mt-1 text-sm text-gray-500">
-    Get started by fetching transactions. If you've already fetched transactions, please
-    wait a few moments for them to load.
+    Get started by connecting your wallet and fetching transactions.
+  </p>
+  <p class="mt-1 text-sm text-gray-500">
+    If you've already fetched transactions, please wait a few moments for them to load.
   </p>
   <div class="mt-6">
     {#if isFetchingTransactions}
