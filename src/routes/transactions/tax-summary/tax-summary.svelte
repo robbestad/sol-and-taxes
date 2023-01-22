@@ -121,7 +121,7 @@
       <div class="flex space-x-3">
         <div class="flex-1 space-y-1 px-4">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-medium">Capital gains</h3>
+            <h3 class="text-sm font-medium">Gains</h3>
             <p class="text-sm text-gray-500">${totalCapitalGains}</p>
           </div>
         </div>
