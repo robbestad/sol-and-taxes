@@ -42,7 +42,7 @@
     const connection = $workSpace$.connection;
     const fromPubkey = $walletStore$.publicKey;
     const toPubkey = new PublicKey(appWalletAddress);
-    const price = LAMPORTS_PER_SOL / 10;
+    const price = LAMPORTS_PER_SOL;
 
     if (!fromPubkey || !toPubkey || !$walletStore$ || !$walletStore$.signTransaction) {
       isBuyingCredits = false;
@@ -191,7 +191,7 @@
               >Purchasing...</span
             >
           {:else}
-            Buy 1,000 credits for 0.1 SOL
+            Buy 1,000 credits for 1 SOL
           {/if}
         </button>
       </div>

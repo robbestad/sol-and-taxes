@@ -42,3 +42,4 @@ See `{infrastructure-repo}` `README` for `k8s` deployment instructions
 
 - Attach `wallet-address` header when making api calls.
 - `hooks.ts` handles server auth, `+layout.ts` initializes data by hitting `/api/data-initialization`
+- 1,000 transactions ~ 2MB storage
