@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { workSpace as workSpace$ } from '@svelte-on-solana/wallet-adapter-ui';
   import { walletStore as walletStore$ } from '@svelte-on-solana/wallet-adapter-core';
   import {
     PublicKey,
@@ -39,10 +38,9 @@
     /**
      * Transaction
      */
-    const connection = $workSpace$.connection;
     const fromPubkey = $walletStore$.publicKey;
     const toPubkey = new PublicKey(appWalletAddress);
-    const price = LAMPORTS_PER_SOL;
+    const price = LAMPORTS_PER_SOL / 2;
 
     if (!fromPubkey || !toPubkey || !$walletStore$ || !$walletStore$.signTransaction) {
       isBuyingCredits = false;
@@ -191,7 +189,7 @@
               >Purchasing...</span
             >
           {:else}
-            Buy 1,000 credits for 1 SOL
+            Buy 1,000 credits for 0.5 SOL
           {/if}
         </button>
       </div>
